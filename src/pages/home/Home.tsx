@@ -1,6 +1,6 @@
 import React from "react";
 import Header from "../../components/navbar/Navbar";
-import { Tabela } from "../../components/table/TabelaCompleta";
+import { Tabela } from "../../components/tabelaCompleta/TabelaCompleta";
 
 const Home: React.FC = () => {
   return (

@@ -21,7 +21,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditIcon from "@mui/icons-material/Edit";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import UnarchiveIcon from "@mui/icons-material/Unarchive";
-import ModalRecado from "../../components/modal/Modal";
+import ModalRecado from "../modal/Modal";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
   deleteRecado,
@@ -30,7 +30,7 @@ import {
   selectAll,
   updateRecado,
 } from "../../store/modules/recados/RecadosSlice";
-import { SearchBar } from "../../components/searchBar/SearchBar";
+import { SearchBar } from "../searchBar/SearchBar";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
