@@ -30,7 +30,7 @@ import {
   selectAll,
   updateRecado,
 } from "../../store/modules/recados/RecadosSlice";
-import SearchBar from "../searchBar/SearchBar";
+import { SearchBar } from "../searchBar/SearchBar"
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {

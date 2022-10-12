@@ -30,8 +30,7 @@ import {
   selectAll,
   updateRecado,
 } from "../../store/modules/recados/RecadosSlice";
-import SearchBar from "../../components/searchBar/SearchBar";
-import Search from "@mui/icons-material/Search";
+import { SearchBar } from "../../components/searchBar/SearchBar";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {

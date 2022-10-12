@@ -15,7 +15,7 @@ type SearchBarProps = {
   setStatus: React.Dispatch<React.SetStateAction<string>>;
 };
 
-const SearchBar = (props: SearchBarProps) => {
+export const SearchBar = (props: SearchBarProps) => {
   const navigate = useNavigate();
   const { setAssunto, handleFunction, assunto, status, setStatus } = props;
 
@@ -60,5 +60,3 @@ const SearchBar = (props: SearchBarProps) => {
     </ContainerSearch>
   );
 };
-
-export default SearchBar;
