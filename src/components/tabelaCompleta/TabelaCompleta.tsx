@@ -162,11 +162,11 @@ export const Tabela = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {listaRecadosRdx.map((recado: RecadoApi) => (
-                    <StyledTableRow key={recado.id}>
+                  {listaRecadosRdx?.map((recado: RecadoApi) => (
+                    <StyledTableRow key={recado?.id}>
                       {arquivar
                         ? (() => {
-                            if (recado.arquivado === true) {
+                            if (recado.arquivado) {
                               return (
                                 <>
                                   <StyledTableCell>
@@ -218,7 +218,7 @@ export const Tabela = () => {
                             }
                           })()
                         : (() => {
-                            if (recado.arquivado === false) {
+                            if (!recado.arquivado) {
                               return (
                                 <>
                                   <StyledTableCell className="border-r-2">

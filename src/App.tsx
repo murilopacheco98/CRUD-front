@@ -3,16 +3,16 @@ import { Provider } from "react-redux";
 import './index.css'
 import AppRoutes from "./routes/AppRoutes";
 import StylesGlobal from "./config/GlobalStyles";
-import { store } from "./store";
-// import { PersistGate } from "redux-persist/integration/react";
+import { persistor, store } from "./store";
+import { PersistGate } from "redux-persist/integration/react";
 
 const App: React.FC = () => {
   return (
     <Provider store={store}>
-      {/* <PersistGate persistor={persistor}> */}
+      <PersistGate loading={null} persistor={persistor}>
         <StylesGlobal />
         <AppRoutes />
-      {/* </PersistGate>   */}
+      </PersistGate>  
     </Provider>
   );
 };
