@@ -71,6 +71,10 @@ export const TabelaSearch = () => {
   };
 
   useEffect(() => {
+    console.log(assunto)
+    console.log(status)
+    console.log(url)
+
     dispatch(getRecadosSearch({assunto, status}));
   }, []);
 
