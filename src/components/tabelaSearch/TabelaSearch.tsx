@@ -70,13 +70,12 @@ export const TabelaSearch = () => {
     setRender(!render)
   };
 
-  useEffect(() => {
-    console.log(assunto)
-    console.log(status)
-    console.log(url)
-
-    dispatch(getRecadosSearch({assunto, status}));
-  }, []);
+  // useEffect(() => {
+  //   console.log(assunto)
+  //   console.log(status)
+  //   console.log(url)
+  //   dispatch(getRecadosSearch({assunto, status}));
+  // }, []);
 
   useEffect(() => {
   }, [arquivar]);
