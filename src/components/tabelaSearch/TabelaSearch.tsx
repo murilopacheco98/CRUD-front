@@ -79,9 +79,8 @@ export const TabelaSearch = () => {
 
   useEffect(() => {
   }, [arquivar]);
-    console.log("o assunto é: " + assunto)
+
   useEffect(() => {
-    console.log("o assunto é: " + assunto)
     dispatch(getRecadosSearch({assunto, status}));
   }, [render]);
 
