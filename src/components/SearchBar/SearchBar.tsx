@@ -35,7 +35,7 @@ export const SearchBar = (props: SearchBarProps) => {
           }
         }}
       />
-      <div className="w-[220px] mr-3">
+      <div className="w-[250px] mr-3">
         <Select
           value={status}
           onChange={(e: any) => setStatus(e.target.value)}

@@ -12,6 +12,7 @@ const AppRoutes: React.FC = () => {
         {/* <Route path="/" element={<LayoutDefault component={Home} />} /> */}
           <Route path="/" element={<Home />} />
           <Route path="/search=:assunto/:status" element={<Tabela />} />
+          <Route path="/search=/:status" element={<Tabela />} />
         </Routes>
       </BrowserRouter>
     </>
