@@ -11,7 +11,6 @@ import {
   Button,
   Checkbox,
   Container,
-  FormControlLabel,
   Grid,
   IconButton,
   Typography,
@@ -66,7 +65,13 @@ export const Tabela = () => {
     dispatch(getAllRecados());
   }, []);
 
-  useEffect(() => undefined, [arquivar]);
+  useEffect(() => {
+    console.log("passou aqui");
+  }, [arquivar]);
+
+  const handleChange = () => {
+    setArquivar(!arquivar);
+  };
 
   const openModal = () => {
     setModal(true);
@@ -131,11 +136,14 @@ export const Tabela = () => {
           {/* </Container> */}
           <Container sx={{ mt: 3 }}>
             <div className="justify-around flex">
-              <FormControlLabel
-                control={<Checkbox />}
-                onClick={() => setArquivar(!arquivar)}
-                label="ARQUIVADOS"
-              />
+              <Button variant="text" onClick={handleChange}>
+                <Checkbox
+                  checked={arquivar}
+                  onChange={handleChange}
+                  inputProps={{ "aria-label": "controlled" }}
+                />
+                <div className="text-[15px]">ARQUIVADOS</div>
+              </Button>
               <Button variant="contained" sx={{ mb: 2 }} onClick={openModal}>
                 ADICIONAR RECADO
               </Button>

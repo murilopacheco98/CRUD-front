@@ -33,6 +33,7 @@ const ModalRecado: React.FC<ModalRecadoProps> = (props) => {
   const [descricao, setDescricao] = useState<string>("");
   const [idEdicao, setIdEdicao] = useState<number>(0);
   const [status, setStatus] = React.useState<string>("em-andamento");
+  const [arquivar, setArquivar] = useState<boolean>(false);
 
   const salvarRecado = () => {
     dispatch(postRecado({ assunto, descricao, arquivado: false, status }));
@@ -54,14 +55,14 @@ const ModalRecado: React.FC<ModalRecadoProps> = (props) => {
         status: status,
         assunto: assunto,
         descricao: descricao,
-        arquivado: recadoEncontrado?.arquivado
-          ? recadoEncontrado.arquivado
-          : false,
+        arquivado: arquivar,
       })
     );
+
     closeModal();
     setAssunto("");
     setDescricao("");
+    setArquivar(false);
   };
 
   useEffect(() => {
@@ -79,6 +80,7 @@ const ModalRecado: React.FC<ModalRecadoProps> = (props) => {
       setAssunto(recadoEncontrado.assunto);
       setDescricao(recadoEncontrado.descricao);
       setStatus(recadoEncontrado.status);
+      setArquivar(recadoEncontrado.arquivado);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idEdicao]);
