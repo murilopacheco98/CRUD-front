@@ -4,11 +4,11 @@ import { TabelaSearch } from "../../components/tabelaSearch/TabelaSearch";
 
 const Tabela: React.FC = () => {
   return (
-      <>
-        <Header/>
-        <TabelaSearch />
-      </>
-   );
+    <>
+      <Header />
+      <TabelaSearch />
+    </>
+  );
 };
 
-export default Tabela
+export default Tabela;

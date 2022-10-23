@@ -30,7 +30,7 @@ import {
   selectAll,
   updateRecado,
 } from "../../store/modules/recados/RecadosSlice";
-import { SearchBar } from "../SearchBar/SearchBar"
+import { SearchBar } from "../SearchBar/SearchBar";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -113,21 +113,21 @@ export const Tabela = () => {
   };
 
   const listaRecadosRdx = useAppSelector(selectAll);
-  console.log(status)
+
   return (
     <>
       <Grid container>
         <Grid item xs={12}>
           {/* <Container sx={{ mt: 3 }}> */}
-            <div className="justify-center flex mt-7">
-              <SearchBar
-                search={true}
-                assunto={assunto}
-                setAssunto={setAssunto}
-                status={status}
-                setStatus={setStatus}
-              />
-            </div>
+          <div className="justify-center flex mt-7">
+            <SearchBar
+              search={true}
+              assunto={assunto}
+              setAssunto={setAssunto}
+              status={status}
+              setStatus={setStatus}
+            />
+          </div>
           {/* </Container> */}
           <Container sx={{ mt: 3 }}>
             <div className="justify-around flex">
@@ -292,4 +292,4 @@ export const Tabela = () => {
       ></ModalRecado>
     </>
   );
-}
+};

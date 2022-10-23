@@ -22,7 +22,7 @@ export const SearchBar = (props: SearchBarProps) => {
   return (
     <ContainerSearch>
       <InputSearchBar
-      className="focus:outline-none focus:border-sky-500 focus:ring-1"
+        className="focus:outline-none focus:border-sky-500 focus:ring-1"
         placeholder="Digite o assunto do recado"
         onChange={(event: {
           target: { value: React.SetStateAction<string> };
@@ -50,9 +50,7 @@ export const SearchBar = (props: SearchBarProps) => {
       </div>
       <div className="rounded-xl border-solid border-[0.5px] border-gray-100">
         <Link to={`/search=${assunto}/${status}`}>
-          <Button
-            onClick={handleFunction} 
-          >
+          <Button onClick={handleFunction}>
             <SearchIcon sx={{ fontSize: 42 }} />
           </Button>
         </Link>

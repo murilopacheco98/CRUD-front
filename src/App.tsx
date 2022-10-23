@@ -1,6 +1,6 @@
 import React from "react";
 import { Provider } from "react-redux";
-import './index.css'
+import "./index.css";
 import AppRoutes from "./routes/AppRoutes";
 import StylesGlobal from "./config/GlobalStyles";
 import { persistor, store } from "./store";
@@ -12,9 +12,9 @@ const App: React.FC = () => {
       <PersistGate loading={null} persistor={persistor}>
         <StylesGlobal />
         <AppRoutes />
-      </PersistGate>  
+      </PersistGate>
     </Provider>
   );
 };
 
-export default App
+export default App;

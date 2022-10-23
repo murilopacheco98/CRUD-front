@@ -39,7 +39,7 @@ const ModalRecado: React.FC<ModalRecadoProps> = (props) => {
     closeModal();
     setAssunto("");
     setDescricao("");
-    setStatus("em-andamento")
+    setStatus("em-andamento");
   };
 
   const closeModal = () => {
@@ -54,7 +54,9 @@ const ModalRecado: React.FC<ModalRecadoProps> = (props) => {
         status: status,
         assunto: assunto,
         descricao: descricao,
-        arquivado: recadoEncontrado?.arquivado ? recadoEncontrado.arquivado : false,
+        arquivado: recadoEncontrado?.arquivado
+          ? recadoEncontrado.arquivado
+          : false,
       })
     );
     closeModal();
@@ -83,7 +85,9 @@ const ModalRecado: React.FC<ModalRecadoProps> = (props) => {
 
   return (
     <Dialog open={openModal}>
-      <DialogTitle className="flex justify-center">{edition ? "Editar Recado" : "Novo Recado"}</DialogTitle>
+      <DialogTitle className="flex justify-center">
+        {edition ? "Editar Recado" : "Novo Recado"}
+      </DialogTitle>
       <Container>
         <Typography variant="subtitle1">Titulo</Typography>
         <TextField

@@ -53,9 +53,9 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 export const TabelaSearch = () => {
-  const url = window.location.href.split('/');
-  const assuntoPage = url[3].split('=')[1]
-  const statusPage = url[4]
+  const url = window.location.href.split("/");
+  const assuntoPage = url[3].split("=")[1];
+  const statusPage = url[4];
   const dispatch = useAppDispatch();
 
   const [modal, setModal] = useState<boolean>(false);
@@ -67,7 +67,7 @@ export const TabelaSearch = () => {
   const [assunto, setAssunto] = useState<string>(assuntoPage);
 
   const handleFunction = (event: React.ChangeEvent<unknown>, value: string) => {
-    setRender(!render)
+    setRender(!render);
   };
 
   // useEffect(() => {
@@ -77,11 +77,10 @@ export const TabelaSearch = () => {
   //   dispatch(getRecadosSearch({assunto, status}));
   // }, []);
 
-  useEffect(() => {
-  }, [arquivar]);
+  useEffect(() => {}, [arquivar]);
 
   useEffect(() => {
-    dispatch(getRecadosSearch({assunto, status}));
+    dispatch(getRecadosSearch({ assunto, status }));
   }, [render]);
 
   const openModal = () => {

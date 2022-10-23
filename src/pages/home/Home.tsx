@@ -4,11 +4,11 @@ import { Tabela } from "../../components/tabelaCompleta/TabelaCompleta";
 
 const Home: React.FC = () => {
   return (
-      <>
-        <Header/>
-        <Tabela />
-      </>
-   );
+    <>
+      <Header />
+      <Tabela />
+    </>
+  );
 };
 
 export default Home;

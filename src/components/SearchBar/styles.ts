@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const Container = styled.div`
   font-family: Poppins, sans-serif;
@@ -33,7 +33,7 @@ export const InputSearchBar = styled.input`
   border-radius: 10px;
   font-size: 16px;
   background-color: white;
-`
+`;
 
 export const Logo = styled.img`
   width: 9%;

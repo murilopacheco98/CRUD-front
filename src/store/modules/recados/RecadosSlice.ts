@@ -20,7 +20,7 @@ export const getAllRecados = createAsyncThunk(
   "recados/getAllRecados",
   async () => {
     const response = await api
-      .get('')
+      .get("")
       .then((recados: AxiosResponse) => {
         return recados.data;
       })
@@ -32,13 +32,13 @@ export const getAllRecados = createAsyncThunk(
 );
 
 type searchProps = {
-  assunto: string,
-  status: string,
-}
+  assunto: string;
+  status: string;
+};
 export const getRecadosSearch = createAsyncThunk(
   "recados/getAllRecados",
-  async ( dataSearch: searchProps) => {
-    const requestParam = (`/?search=${dataSearch.assunto}&status=${dataSearch.status}`)
+  async (dataSearch: searchProps) => {
+    const requestParam = `/?search=${dataSearch.assunto}&status=${dataSearch.status}`;
     const response = await api
       .get(requestParam)
       .then((recados: AxiosResponse) => {
@@ -103,10 +103,13 @@ const RecadosSlice = createSlice({
     removeOne: adapter.removeOne, // delete - delete
   },
   extraReducers(builder) {
-    builder.addCase((getAllRecados.fulfilled, getRecadosSearch.fulfilled), (state, action) => {
-      state.loading = false;
-      adapter.setAll(state, action.payload); // get, read + seleciona todos na store
-    });
+    builder.addCase(
+      (getAllRecados.fulfilled, getRecadosSearch.fulfilled),
+      (state, action) => {
+        state.loading = false;
+        adapter.setAll(state, action.payload); // get, read + seleciona todos na store
+      }
+    );
     // builder.addCase(getRecadosSearch.fulfilled, (state, action) => {
     //   state.loading = false;
     //   adapter.removeAll(state)
@@ -114,7 +117,7 @@ const RecadosSlice = createSlice({
     // });
     builder.addCase(postRecado.fulfilled, (state, action) => {
       state.loading = false;
-      adapter.addOne(state, action.payload); // post, create + addOne na store 
+      adapter.addOne(state, action.payload); // post, create + addOne na store
     });
     builder.addCase(updateRecado.fulfilled, (state, action) => {
       state.loading = false;
