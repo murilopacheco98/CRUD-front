@@ -66,7 +66,7 @@ export const TabelaSearch = () => {
   const [render, setRender] = useState<boolean>(false);
   const [assunto, setAssunto] = useState<string>(assuntoPage);
 
-  const handleFunction = (event: React.ChangeEvent<unknown>, value: string) => {
+  const handleFunction = () => {
     setRender(!render);
   };
 

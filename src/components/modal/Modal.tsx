@@ -47,7 +47,7 @@ const ModalRecado: React.FC<ModalRecadoProps> = (props) => {
     setOpenModal(false);
   };
 
-  const editarRecado = (id: number) => {
+  const editarRecado = () => {
     dispatch(
       updateRecado({
         id: recadoEncontrado?.id ? recadoEncontrado?.id : 0,
@@ -118,7 +118,7 @@ const ModalRecado: React.FC<ModalRecadoProps> = (props) => {
             <Button
               variant="contained"
               onClick={() =>
-                edition ? editarRecado(idEdicao) : salvarRecado()
+                edition ? editarRecado() : salvarRecado()
               }
             >
               {edition ? "Editar Recado" : "Salvar"}
