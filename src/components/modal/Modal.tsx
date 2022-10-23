@@ -117,9 +117,7 @@ const ModalRecado: React.FC<ModalRecadoProps> = (props) => {
           <Stack direction="row" spacing={2}>
             <Button
               variant="contained"
-              onClick={() =>
-                edition ? editarRecado() : salvarRecado()
-              }
+              onClick={() => (edition ? editarRecado() : salvarRecado())}
             >
               {edition ? "Editar Recado" : "Salvar"}
             </Button>
