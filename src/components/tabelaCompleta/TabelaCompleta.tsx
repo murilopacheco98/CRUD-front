@@ -66,7 +66,7 @@ export const Tabela = () => {
     dispatch(getAllRecados());
   }, []);
 
-  useEffect(() => {}, [arquivar]);
+  useEffect(() => undefined, [arquivar]);
 
   const openModal = () => {
     setModal(true);

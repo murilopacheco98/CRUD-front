@@ -77,7 +77,7 @@ export const TabelaSearch = () => {
   //   dispatch(getRecadosSearch({assunto, status}));
   // }, []);
 
-  useEffect(() => {}, [arquivar]);
+  useEffect(() => undefined, [arquivar]);
 
   useEffect(() => {
     dispatch(getRecadosSearch({ assunto, status }));
