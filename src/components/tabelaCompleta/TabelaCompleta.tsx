@@ -135,18 +135,19 @@ export const Tabela = () => {
           </div>
           {/* </Container> */}
           <Container sx={{ mt: 3 }}>
-            <div className="justify-around flex">
+            <div className="w-[100%] h-[45px] justify-around flex mb-4">
               <Button variant="text" onClick={handleChange}>
                 <Checkbox
                   checked={arquivar}
-                  onChange={handleChange}
                   inputProps={{ "aria-label": "controlled" }}
                 />
                 <div className="text-[15px]">ARQUIVADOS</div>
               </Button>
-              <Button variant="contained" sx={{ mb: 2 }} onClick={openModal}>
-                ADICIONAR RECADO
-              </Button>
+              <div className="flex">
+                <Button variant="contained" onClick={openModal}>
+                  <div className="text-[15px]">ADICIONAR RECADO</div>
+                </Button>
+              </div>
             </div>
             <TableContainer component={Paper}>
               <Table aria-label="customized table">
@@ -177,18 +178,27 @@ export const Tabela = () => {
                             if (recado.arquivado) {
                               return (
                                 <>
-                                  <StyledTableCell>
+                                  <StyledTableCell className="border-r-2">
                                     <Typography variant="h5">
                                       <b>{recado.id}</b>
                                     </Typography>
                                   </StyledTableCell>
-                                  <StyledTableCell align="center">
+                                  <StyledTableCell
+                                    align="center"
+                                    className="border-r-2"
+                                  >
                                     {recado.status}
                                   </StyledTableCell>
-                                  <StyledTableCell align="center">
+                                  <StyledTableCell
+                                    align="center"
+                                    className="border-r-2"
+                                  >
                                     {recado.assunto}
                                   </StyledTableCell>
-                                  <StyledTableCell align="center">
+                                  <StyledTableCell
+                                    align="center"
+                                    className="border-r-2"
+                                  >
                                     {recado.descricao}
                                   </StyledTableCell>
                                   <StyledTableCell align="center">
@@ -204,20 +214,20 @@ export const Tabela = () => {
                                         onClick={() => deletarRecado(recado)}
                                       >
                                         <DeleteForeverIcon
-                                          sx={{ fontSize: 35 }}
+                                          sx={{ fontSize: 30 }}
                                         />
                                       </IconButton>
                                       <IconButton
                                         onClick={() => editarRecado(recado.id)}
                                       >
-                                        <EditIcon sx={{ fontSize: 35 }} />
+                                        <EditIcon sx={{ fontSize: 30 }} />
                                       </IconButton>
                                       <IconButton
                                         onClick={() =>
                                           desarquivarRecado(recado)
                                         }
                                       >
-                                        <UnarchiveIcon sx={{ fontSize: 35 }} />
+                                        <UnarchiveIcon sx={{ fontSize: 30 }} />
                                       </IconButton>
                                     </Stack>
                                   </StyledTableCell>
