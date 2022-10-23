@@ -1,1 +1,1 @@
-Para vizualizar o projeto basta clicar no link: [crudrecados.herokuapp.com](https://crudrecados.herokuapp.com/).   
+Para vizualizar o projeto basta clicar no link: [crudrecados.netlify.app](https://crudrecados.netlify.app/).   
