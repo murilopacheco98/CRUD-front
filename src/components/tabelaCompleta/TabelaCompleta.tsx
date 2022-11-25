@@ -61,12 +61,18 @@ export const Tabela = () => {
   const [status, setStatus] = useState<string>("em-andamento");
   const [assunto, setAssunto] = useState<string>("");
 
-  useEffect(() => {
-    dispatch(getAllRecados());
-  }, []);
+  const user = Object.values(useAppSelector((store) => store.users.entities));
 
   useEffect(() => {
     console.log("passou aqui");
+    if (user[0]) {
+      dispatch(getAllRecados(user[0]));
+      console.log("disparou");
+    }
+  }, []);
+
+  useEffect(() => {
+    const vazio = 0;
   }, [arquivar]);
 
   const handleChange = () => {
@@ -101,6 +107,8 @@ export const Tabela = () => {
         assunto: recado.assunto,
         descricao: recado.descricao,
         arquivado: true,
+        createdAt: recado.createdAt,
+        updatedAt: recado.updatedAt,
       })
     );
   };
@@ -113,6 +121,8 @@ export const Tabela = () => {
         assunto: recado.assunto,
         descricao: recado.descricao,
         arquivado: false,
+        createdAt: recado.createdAt,
+        updatedAt: recado.updatedAt,
       })
     );
   };
@@ -172,7 +182,7 @@ export const Tabela = () => {
                 </TableHead>
                 <TableBody>
                   {listaRecadosRdx?.map((recado: RecadoApi) => (
-                    <StyledTableRow key={recado?.id}>
+                    <StyledTableRow key={recado.id}>
                       {arquivar
                         ? (() => {
                             if (recado.arquivado) {
@@ -307,6 +317,7 @@ export const Tabela = () => {
         actionCancel={closeModal}
         idEdition={idRecado}
         edition={edicao}
+        user={user[0]}
       ></ModalRecado>
     </>
   );

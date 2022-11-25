@@ -16,16 +16,18 @@ import {
 } from "../../store/modules/recados/RecadosSlice";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
+import { UserApi } from "../../store/modules/user/UserSlice";
 
 interface ModalRecadoProps {
   isOpen: boolean;
   actionCancel: () => void;
   idEdition?: number;
   edition: boolean;
+  user: any;
 }
 
 const ModalRecado: React.FC<ModalRecadoProps> = (props) => {
-  const { isOpen, actionCancel, idEdition, edition } = props;
+  const { isOpen, actionCancel, idEdition, edition, user } = props;
   const dispatch = useAppDispatch();
 
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -36,11 +38,15 @@ const ModalRecado: React.FC<ModalRecadoProps> = (props) => {
   const [arquivar, setArquivar] = useState<boolean>(false);
 
   const salvarRecado = () => {
-    dispatch(postRecado({ assunto, descricao, arquivado: false, status }));
-    closeModal();
-    setAssunto("");
-    setDescricao("");
-    setStatus("em-andamento");
+    if (user.authToken) {
+      dispatch(
+        postRecado({ assunto, descricao, arquivado: false, status, user })
+      );
+      closeModal();
+      setAssunto("");
+      setDescricao("");
+      setStatus("em-andamento");
+    }
   };
 
   const closeModal = () => {
@@ -56,6 +62,8 @@ const ModalRecado: React.FC<ModalRecadoProps> = (props) => {
         assunto: assunto,
         descricao: descricao,
         arquivado: arquivar,
+        createdAt: recadoEncontrado?.createdAt,
+        updatedAt: recadoEncontrado?.updatedAt,
       })
     );
 

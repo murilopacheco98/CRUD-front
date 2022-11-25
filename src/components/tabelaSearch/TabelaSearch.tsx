@@ -25,7 +25,7 @@ import ModalRecado from "../modal/Modal";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
   deleteRecado,
-  getRecadosSearch,
+  getRecadosAssuntoSearch,
   RecadoApi,
   selectAll,
   updateRecado,
@@ -70,17 +70,10 @@ export const TabelaSearch = () => {
     setRender(!render);
   };
 
-  // useEffect(() => {
-  //   console.log(assunto)
-  //   console.log(status)
-  //   console.log(url)
-  //   dispatch(getRecadosSearch({assunto, status}));
-  // }, []);
-
   useEffect(() => undefined, [arquivar]);
 
   useEffect(() => {
-    dispatch(getRecadosSearch({ assunto, status }));
+    dispatch(getRecadosAssuntoSearch({ assunto, status }));
   }, [render]);
 
   const openModal = () => {
@@ -111,6 +104,8 @@ export const TabelaSearch = () => {
         assunto: recado.assunto,
         descricao: recado.descricao,
         arquivado: true,
+        createdAt: recado.createdAt,
+        updatedAt: recado.updatedAt,
       })
     );
   };
@@ -123,11 +118,14 @@ export const TabelaSearch = () => {
         assunto: recado.assunto,
         descricao: recado.descricao,
         arquivado: false,
+        createdAt: recado.createdAt,
+        updatedAt: recado.updatedAt,
       })
     );
   };
 
   const listaRecadosRdx = useAppSelector(selectAll);
+  const user = Object.values(useAppSelector((store) => store.users.entities));
 
   return (
     <>
@@ -305,6 +303,7 @@ export const TabelaSearch = () => {
         actionCancel={closeModal}
         idEdition={idRecado}
         edition={edicao}
+        user={user[0]}
       ></ModalRecado>
     </>
   );

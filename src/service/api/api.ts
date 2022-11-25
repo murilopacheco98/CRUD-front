@@ -1,5 +1,6 @@
 import axios from "axios";
 
 export const api = axios.create({
-  baseURL: "https://recados.herokuapp.com/recados",
+  // baseURL: "https://crud-login-api.herokuapp.com",
+  baseURL: "http://localhost:8080",
 });

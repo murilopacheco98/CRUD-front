@@ -7,6 +7,7 @@ import { api } from "../../../service/api/api";
 import RecadoSemId from "../../../types/Recado";
 import { RootState } from "../..";
 import { AxiosResponse } from "axios";
+import { UserApi } from "../user/UserSlice";
 
 export interface RecadoApi {
   id: number;
@@ -14,13 +15,16 @@ export interface RecadoApi {
   descricao: string;
   arquivado: boolean;
   status: string;
+  createdAt: any;
+  updatedAt: any;
 }
 
 export const getAllRecados = createAsyncThunk(
   "recados/getAllRecados",
-  async () => {
+  async (user: UserApi) => {
+    const { id } = user;
     const response = await api
-      .get("")
+      .get(`/recados/getall/${id}`)
       .then((recados: AxiosResponse) => {
         return recados.data;
       })
@@ -35,10 +39,10 @@ type searchProps = {
   assunto: string;
   status: string;
 };
-export const getRecadosSearch = createAsyncThunk(
+export const getRecadosAssuntoSearch = createAsyncThunk(
   "recados/getAllRecados",
   async (dataSearch: searchProps) => {
-    const requestParam = `/?search=${dataSearch.assunto}&status=${dataSearch.status}`;
+    const requestParam = `/assunto?search=${dataSearch.assunto}&status=${dataSearch.status}`;
     const response = await api
       .get(requestParam)
       .then((recados: AxiosResponse) => {
@@ -55,7 +59,7 @@ export const postRecado = createAsyncThunk(
   "recados/postRecado",
   async (dado: RecadoSemId) => {
     const response = await api
-      .post("/", dado)
+      .post("/recados/create", dado)
       .then((recados: AxiosResponse) => recados.data)
       .catch((erro: AxiosResponse) => erro);
     return response;
@@ -66,7 +70,7 @@ export const updateRecado = createAsyncThunk(
   "recados/updateRecado",
   async (dado: RecadoApi) => {
     const { id } = dado;
-    const url = `/${id}`;
+    const url = `/recado/${id}`;
     const response = await api
       .put(url, dado)
       .then((recados: AxiosResponse) => recados.data)
@@ -80,7 +84,7 @@ export const deleteRecado = createAsyncThunk(
   async (dado: RecadoApi) => {
     const { id } = dado;
     const response = await api
-      .delete(`/${id}`)
+      .delete(`/recado/${id}`)
       .then((recados: AxiosResponse) => recados.data)
       .catch((erro: AxiosResponse) => erro);
     return response;
@@ -104,7 +108,7 @@ const RecadosSlice = createSlice({
   },
   extraReducers(builder) {
     builder.addCase(
-      (getAllRecados.fulfilled, getRecadosSearch.fulfilled),
+      (getAllRecados.fulfilled, getRecadosAssuntoSearch.fulfilled),
       (state, action) => {
         state.loading = false;
         adapter.setAll(state, action.payload); // get, read + seleciona todos na store

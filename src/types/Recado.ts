@@ -3,6 +3,7 @@ interface RecadoSemId {
   descricao: string;
   arquivado: boolean;
   status: string;
+  user: any;
 }
 
 export default RecadoSemId;
