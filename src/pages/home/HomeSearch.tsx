@@ -2,7 +2,7 @@ import React from "react";
 import Header from "../../components/navbar/Navbar";
 import { TabelaSearch } from "../../components/tabelaSearch/TabelaSearch";
 
-const Tabela: React.FC = () => {
+const HomeSearch: React.FC = () => {
   return (
     <>
       <Header />
@@ -11,4 +11,4 @@ const Tabela: React.FC = () => {
   );
 };
 
-export default Tabela;
+export default HomeSearch;

@@ -26,7 +26,7 @@ export default function Header() {
             xs={12}
             sx={{ display: "flex", justifyContent: "center", paddingTop: 2 }}
           >
-            <Link to={`/home`} className="flex">
+            <Link to={`/recados/page=1`} className="flex">
               <TextSnippetIcon sx={{ fontSize: 40, color: "white" }} />
               <Typography variant="h4" sx={{ color: "white", marginLeft: 2 }}>
                 <b> API - CRUD</b>

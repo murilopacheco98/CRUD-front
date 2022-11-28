@@ -149,6 +149,10 @@ const RecadosSlice = createSlice({
         adapter.setAll(state, action.payload); // get, read + seleciona todos na store
       }
     );
+    builder.addCase(getRecadosSearch.fulfilled, (state, action) => {
+      state.loading = false;
+      adapter.setAll(state, action.payload); // get, read + seleciona todos na store
+    });
     builder.addCase(postRecado.fulfilled, (state, action) => {
       state.loading = false;
       if (state.ids.length < 10) {

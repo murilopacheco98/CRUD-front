@@ -25,7 +25,6 @@ export const SignIn = () => {
   useEffect(() => {
     if (user[0]?.authToken) {
       navigate("/recados/page=1");
-      alert("disparou");
     }
   }, []);
 

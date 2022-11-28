@@ -24,7 +24,7 @@ export const SignUp = () => {
   const dispatch = useAppDispatch();
 
   const register = async (values: Values) => {
-    const { email, password, Name } = values;
+    const { email, password, Name, confirmPassword } = values;
     const usuario = await dispatch(
       postUserRegister({
         email: email,
@@ -50,10 +50,10 @@ export const SignUp = () => {
         /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
         "Must contain 8 characters, one uppercase, one lowercase, one number and one special case character."
       ),
-    // .required("Password is required.")
-    confirmPassword: Yup.string()
-      // .required("Confirm password is required.")
-      .oneOf([Yup.ref("password"), null], "Confirm Password does not match."),
+    confirmPassword: Yup.string().oneOf(
+      [Yup.ref("password"), null],
+      "Confirm Password does not match."
+    ),
     // acceptTerms: Yup.bool().oneOf([true], 'Accept Terms is required'),
   });
 
@@ -136,6 +136,7 @@ export const SignUp = () => {
             </div>
             <div className="mb-[15px]">
               <TextField
+                required
                 fullWidth
                 label="Confirm password"
                 {...getFieldProps("confirmPassword")}

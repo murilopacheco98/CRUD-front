@@ -12,11 +12,11 @@ const Home: React.FC = () => {
     if (user[0]) {
       if (!user[0].authToken) {
         navigate("/");
-        alert("Token expirado");
+        // alert("Token expirado");
       }
     } else {
       navigate("/");
-      alert("Token expirado 1");
+      // alert("Token expirado");
     }
   }, []);
 
