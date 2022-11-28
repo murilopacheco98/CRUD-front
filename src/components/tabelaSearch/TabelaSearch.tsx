@@ -25,7 +25,7 @@ import ModalRecado from "../modal/Modal";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
   deleteRecado,
-  getRecadosAssuntoSearch,
+  getRecadosSearch,
   RecadoApi,
   selectAll,
   updateRecado,
@@ -66,6 +66,8 @@ export const TabelaSearch = () => {
   const [render, setRender] = useState<boolean>(false);
   const [assunto, setAssunto] = useState<string>(assuntoPage);
 
+  const user = Object.values(useAppSelector((store) => store.users.entities));
+
   const handleFunction = () => {
     setRender(!render);
   };
@@ -73,7 +75,9 @@ export const TabelaSearch = () => {
   useEffect(() => undefined, [arquivar]);
 
   useEffect(() => {
-    dispatch(getRecadosAssuntoSearch({ assunto, status }));
+    if (user[0]) {
+      dispatch(getRecadosSearch({ id: user[0].id, search: assunto, status }));
+    }
   }, [render]);
 
   const openModal = () => {
@@ -104,8 +108,10 @@ export const TabelaSearch = () => {
         assunto: recado.assunto,
         descricao: recado.descricao,
         arquivado: true,
+        qtdRecados: recado.qtdRecados,
         createdAt: recado.createdAt,
         updatedAt: recado.updatedAt,
+        user: recado.user,
       })
     );
   };
@@ -118,14 +124,16 @@ export const TabelaSearch = () => {
         assunto: recado.assunto,
         descricao: recado.descricao,
         arquivado: false,
+        qtdRecados: recado.qtdRecados,
         createdAt: recado.createdAt,
         updatedAt: recado.updatedAt,
+        user: recado.user,
       })
     );
   };
 
   const listaRecadosRdx = useAppSelector(selectAll);
-  const user = Object.values(useAppSelector((store) => store.users.entities));
+  // const user = Object.values(useAppSelector((store) => store.users.entities));
 
   return (
     <>
@@ -140,6 +148,7 @@ export const TabelaSearch = () => {
               status={status}
               setStatus={setStatus}
               handleFunction={handleFunction}
+              id={user[0] ? user[0].id : 0}
             />
           </div>
           {/* </Container> */}

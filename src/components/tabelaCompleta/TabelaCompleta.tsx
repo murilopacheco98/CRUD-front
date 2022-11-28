@@ -13,6 +13,8 @@ import {
   Container,
   Grid,
   IconButton,
+  Pagination,
+  PaginationItem,
   Typography,
 } from "@mui/material";
 import { Stack } from "@mui/system";
@@ -24,12 +26,15 @@ import ModalRecado from "../modal/Modal";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
   deleteRecado,
-  getAllRecados,
+  getAllRecadosPageableArchive,
+  getAllRecadosPageableUnarchive,
   RecadoApi,
   selectAll,
   updateRecado,
 } from "../../store/modules/recados/RecadosSlice";
 import { SearchBar } from "../SearchBar/SearchBar";
+import { PaginationContainer } from "./styles";
+import { Link, useNavigate } from "react-router-dom";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -46,34 +51,76 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     backgroundColor: theme.palette.action.hover,
   },
   // hide last border
-  "&:last-child td, &:last-child th": {
-    border: 0,
-  },
+  // "&:last-child td, &:last-child th": {
+  //   border: 0,
+  // },
 }));
 
 export const Tabela = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
+  const url = window.location.href.split("/");
+  const urlCurrentePage = url[4].split("=");
+
+  const [currentPage, setCurrentPage] = useState<number>(
+    Number(urlCurrentePage[1])
+  );
   const [modal, setModal] = useState<boolean>(false);
   const [edicao, setEdicao] = useState<boolean>(false);
   const [idRecado, setIdRecado] = useState<number>();
   const [arquivar, setArquivar] = useState<boolean>(false);
   const [status, setStatus] = useState<string>("em-andamento");
   const [assunto, setAssunto] = useState<string>("");
+  const [render, setRender] = useState<boolean>(false);
 
   const user = Object.values(useAppSelector((store) => store.users.entities));
+  const recados = Object.values(
+    useAppSelector((store) => store.recados.entities)
+  );
+
+  const handleChangePage = (
+    event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    setCurrentPage(value);
+  };
+
+  const size = 10;
+  let page = 1;
+  if (recados[0]) {
+    page = arquivar
+      ? Math.ceil(recados[0].user.qtdRecadosArquivados / 10)
+      : Math.ceil(recados[0].user.qtdRecadosDesarquivados / 10);
+  }
 
   useEffect(() => {
-    console.log("passou aqui");
-    if (user[0]) {
-      dispatch(getAllRecados(user[0]));
-      console.log("disparou");
+    if (arquivar) {
+      if (user[0]) {
+        dispatch(
+          getAllRecadosPageableArchive({
+            userId: user[0].id,
+            page: currentPage - 1,
+            size,
+          })
+        );
+      } else {
+        navigate("/");
+      }
+    } else {
+      if (user[0]) {
+        dispatch(
+          getAllRecadosPageableUnarchive({
+            userId: user[0].id,
+            page: currentPage - 1,
+            size,
+          })
+        );
+      } else {
+        navigate("/");
+      }
     }
-  }, []);
-
-  useEffect(() => {
-    const vazio = 0;
-  }, [arquivar]);
+  }, [currentPage, arquivar, render]);
 
   const handleChange = () => {
     setArquivar(!arquivar);
@@ -100,6 +147,7 @@ export const Tabela = () => {
   };
 
   const arquivarRecado = (recado: RecadoApi) => {
+    setRender(!render);
     dispatch(
       updateRecado({
         id: recado.id,
@@ -107,13 +155,16 @@ export const Tabela = () => {
         assunto: recado.assunto,
         descricao: recado.descricao,
         arquivado: true,
+        qtdRecados: recado.qtdRecados,
         createdAt: recado.createdAt,
         updatedAt: recado.updatedAt,
+        user: recado.user,
       })
     );
   };
 
   const desarquivarRecado = (recado: RecadoApi) => {
+    setRender(!render);
     dispatch(
       updateRecado({
         id: recado.id,
@@ -121,13 +172,16 @@ export const Tabela = () => {
         assunto: recado.assunto,
         descricao: recado.descricao,
         arquivado: false,
+        qtdRecados: recado.qtdRecados,
         createdAt: recado.createdAt,
         updatedAt: recado.updatedAt,
+        user: recado.user,
       })
     );
   };
 
   const listaRecadosRdx = useAppSelector(selectAll);
+  console.log(listaRecadosRdx);
 
   return (
     <>
@@ -141,6 +195,7 @@ export const Tabela = () => {
               setAssunto={setAssunto}
               status={status}
               setStatus={setStatus}
+              id={user[0] ? user[0].id : 0}
             />
           </div>
           {/* </Container> */}
@@ -309,6 +364,23 @@ export const Tabela = () => {
                 </TableBody>
               </Table>
             </TableContainer>
+            {/* eslint-disable react/jsx-props-no-spreading */}
+            <PaginationContainer>
+              <Pagination
+                onChange={handleChangePage}
+                page={currentPage}
+                count={page}
+                size="large"
+                variant="outlined"
+                renderItem={(item) => (
+                  <PaginationItem
+                    component={Link}
+                    to={`/recados/page=${item.page}`}
+                    {...item}
+                  />
+                )}
+              />
+            </PaginationContainer>
           </Container>
         </Grid>
       </Grid>

@@ -5,13 +5,15 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import TextSnippetIcon from "@mui/icons-material/TextSnippet";
 import { Link, useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { useAppDispatch } from "../../store/hooks";
 import { logout } from "../../store/modules/user/UserSlice";
+import { logoutRecado } from "../../store/modules/recados/RecadosSlice";
 
 export default function Header() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const logoutUser = () => {
+    dispatch(logoutRecado());
     dispatch(logout());
     navigate("/");
   };
@@ -39,7 +41,9 @@ export default function Header() {
         </Grid>
         <Grid container>
           <Grid item xs={11} sx={{ display: "flex", justifyContent: "end" }}>
-            <div onClick={logoutUser}> Logout</div>
+            <div onClick={logoutUser} className="cursor-pointer">
+              Logout
+            </div>
           </Grid>
         </Grid>
       </AppBar>

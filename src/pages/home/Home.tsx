@@ -9,17 +9,14 @@ const Home: React.FC = () => {
 
   const user = Object.values(useAppSelector((store) => store.users.entities));
   useEffect(() => {
-    console.log("1");
     if (user[0]) {
-      console.log("2");
       if (!user[0].authToken) {
-        console.log("3");
         navigate("/");
         alert("Token expirado");
       }
     } else {
       navigate("/");
-      alert("Token expirado");
+      alert("Token expirado 1");
     }
   }, []);
 

@@ -7,6 +7,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 
 type SearchBarProps = {
+  id: number | void;
   search: boolean;
   assunto: string;
   setAssunto: React.Dispatch<React.SetStateAction<string>>;
@@ -17,7 +18,7 @@ type SearchBarProps = {
 
 export const SearchBar = (props: SearchBarProps) => {
   const navigate = useNavigate();
-  const { setAssunto, handleFunction, assunto, status, setStatus } = props;
+  const { id, setAssunto, handleFunction, assunto, status, setStatus } = props;
 
   return (
     <ContainerSearch>
@@ -30,7 +31,7 @@ export const SearchBar = (props: SearchBarProps) => {
         value={assunto}
         onKeyDown={(e: { key: string }) => {
           if (e.key === "Enter") {
-            navigate(`/search=${assunto}/${status}`);
+            navigate(`/recado/${id}?search=${assunto}/${status}`);
             // setSearch(inputValue);
           }
         }}

@@ -14,19 +14,27 @@ export interface RecadoApi {
   assunto: string;
   descricao: string;
   arquivado: boolean;
+  qtdRecados: number;
   status: string;
   createdAt: any;
   updatedAt: any;
+  user: UserApi;
 }
 
-export const getAllRecados = createAsyncThunk(
-  "recados/getAllRecados",
-  async (user: UserApi) => {
-    const { id } = user;
+interface pageableProps {
+  userId: number;
+  page: number;
+  size: number;
+}
+
+export const getAllRecadosPageableArchive = createAsyncThunk(
+  "recados/getAllRecadosPageArchive",
+  async (props: pageableProps) => {
+    const { userId, page, size } = props;
     const response = await api
-      .get(`/recados/getall/${id}`)
+      .get(`/recados/pageable/archive/${userId}?page=${page}&size=${size}`)
       .then((recados: AxiosResponse) => {
-        return recados.data;
+        return recados.data.content;
       })
       .catch((erro: AxiosResponse) => {
         return erro;
@@ -35,14 +43,32 @@ export const getAllRecados = createAsyncThunk(
   }
 );
 
-type searchProps = {
-  assunto: string;
+export const getAllRecadosPageableUnarchive = createAsyncThunk(
+  "recados/getAllRecadosPageUnarchive",
+  async (props: pageableProps) => {
+    const { userId, page, size } = props;
+    const response = await api
+      .get(`/recados/pageable/unarchive/${userId}?page=${page}&size=${size}`)
+      .then((recados: AxiosResponse) => {
+        return recados.data.content;
+      })
+      .catch((erro: AxiosResponse) => {
+        return erro;
+      });
+    return response;
+  }
+);
+
+export interface searchProps {
+  id: number;
+  search: string;
   status: string;
-};
-export const getRecadosAssuntoSearch = createAsyncThunk(
-  "recados/getAllRecados",
+}
+
+export const getRecadosSearch = createAsyncThunk(
+  "recados/getAllRecadosSearch",
   async (dataSearch: searchProps) => {
-    const requestParam = `/assunto?search=${dataSearch.assunto}&status=${dataSearch.status}`;
+    const requestParam = `/recados/${dataSearch.id}?search=${dataSearch.search}&status=${dataSearch.status}`;
     const response = await api
       .get(requestParam)
       .then((recados: AxiosResponse) => {
@@ -57,9 +83,9 @@ export const getRecadosAssuntoSearch = createAsyncThunk(
 
 export const postRecado = createAsyncThunk(
   "recados/postRecado",
-  async (dado: RecadoSemId) => {
+  async (props: RecadoSemId) => {
     const response = await api
-      .post("/recados/create", dado)
+      .post(`/recados/create/${props.user.id}`, props)
       .then((recados: AxiosResponse) => recados.data)
       .catch((erro: AxiosResponse) => erro);
     return response;
@@ -69,10 +95,10 @@ export const postRecado = createAsyncThunk(
 export const updateRecado = createAsyncThunk(
   "recados/updateRecado",
   async (dado: RecadoApi) => {
-    const { id } = dado;
-    const url = `/recado/${id}`;
+    const { id, user } = dado;
+    const url = `/recados/${user.id}/${id}`;
     const response = await api
-      .put(url, dado)
+      .post(url, dado)
       .then((recados: AxiosResponse) => recados.data)
       .catch((erro: AxiosResponse) => erro);
     return response;
@@ -82,14 +108,19 @@ export const updateRecado = createAsyncThunk(
 export const deleteRecado = createAsyncThunk(
   "recados/deleteRecado",
   async (dado: RecadoApi) => {
-    const { id } = dado;
+    const { id, user } = dado;
     const response = await api
-      .delete(`/recado/${id}`)
+      .delete(`/recados/${user.id}/${id}`)
       .then((recados: AxiosResponse) => recados.data)
       .catch((erro: AxiosResponse) => erro);
     return response;
   }
 );
+
+export const logoutRecado = createAsyncThunk("recado/logout", async () => {
+  const response = console.log("Logout recado success.");
+  return response;
+});
 
 const adapter = createEntityAdapter<RecadoApi>({
   selectId: (item) => item.id,
@@ -107,21 +138,22 @@ const RecadosSlice = createSlice({
     removeOne: adapter.removeOne, // delete - delete
   },
   extraReducers(builder) {
+    builder.addCase(getAllRecadosPageableArchive.fulfilled, (state, action) => {
+      state.loading = false;
+      adapter.setAll(state, action.payload); // get, read + seleciona todos na store
+    });
     builder.addCase(
-      (getAllRecados.fulfilled, getRecadosAssuntoSearch.fulfilled),
+      getAllRecadosPageableUnarchive.fulfilled,
       (state, action) => {
         state.loading = false;
         adapter.setAll(state, action.payload); // get, read + seleciona todos na store
       }
     );
-    // builder.addCase(getRecadosSearch.fulfilled, (state, action) => {
-    //   state.loading = false;
-    //   adapter.removeAll(state)
-    //   adapter.setAll(state, action.payload) // get, read + seleciona todos na store
-    // });
     builder.addCase(postRecado.fulfilled, (state, action) => {
       state.loading = false;
-      adapter.addOne(state, action.payload); // post, create + addOne na store
+      if (state.ids.length < 10) {
+        adapter.addOne(state, action.payload);
+      } // post, create + addOne na store
     });
     builder.addCase(updateRecado.fulfilled, (state, action) => {
       state.loading = false;
@@ -133,6 +165,10 @@ const RecadosSlice = createSlice({
     builder.addCase(deleteRecado.fulfilled, (state, action) => {
       state.loading = false;
       adapter.removeOne(state, action.meta.arg.id); // delete, delete + delete na store
+    });
+    builder.addCase(logoutRecado.fulfilled, (state) => {
+      state.loading = false;
+      adapter.removeAll(state);
     });
   },
 });

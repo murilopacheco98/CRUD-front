@@ -9,7 +9,6 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import RotateRight from "@mui/icons-material/RotateRight";
 import { postUserLogin } from "../../store/modules/user/UserSlice";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { getAllRecados } from "../../store/modules/recados/RecadosSlice";
 
 interface Values {
   email: string;
@@ -24,11 +23,9 @@ export const SignIn = () => {
   const user = Object.values(useAppSelector((store) => store.users.entities));
 
   useEffect(() => {
-    console.log("passou aqui");
     if (user[0]?.authToken) {
-      dispatch(getAllRecados(user[0]));
-      navigate("/home");
-      console.log("disparou");
+      navigate("/recados/page=1");
+      alert("disparou");
     }
   }, []);
 
@@ -41,7 +38,7 @@ export const SignIn = () => {
       })
     );
     if (usuarioLogado.payload.id) {
-      navigate("/home");
+      navigate("/recados/page=1");
     } else {
       setTimeout(
         () => alert(usuarioLogado.payload.response.data.message),

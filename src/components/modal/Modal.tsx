@@ -55,17 +55,21 @@ const ModalRecado: React.FC<ModalRecadoProps> = (props) => {
   };
 
   const editarRecado = () => {
-    dispatch(
-      updateRecado({
-        id: recadoEncontrado?.id ? recadoEncontrado?.id : 0,
-        status: status,
-        assunto: assunto,
-        descricao: descricao,
-        arquivado: arquivar,
-        createdAt: recadoEncontrado?.createdAt,
-        updatedAt: recadoEncontrado?.updatedAt,
-      })
-    );
+    if (recadoEncontrado) {
+      dispatch(
+        updateRecado({
+          id: recadoEncontrado.id,
+          status: status,
+          assunto: assunto,
+          descricao: descricao,
+          arquivado: arquivar,
+          qtdRecados: recadoEncontrado.qtdRecados,
+          createdAt: recadoEncontrado.createdAt,
+          updatedAt: recadoEncontrado.updatedAt,
+          user: recadoEncontrado.user,
+        })
+      );
+    }
 
     closeModal();
     setAssunto("");

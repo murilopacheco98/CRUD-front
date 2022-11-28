@@ -13,6 +13,8 @@ export interface UserApi {
   email: string;
   password: string;
   name: string;
+  qtdRecadosArquivados: number;
+  qtdRecadosDesarquivados: number;
   createdAt: string;
   updateAt: string | null;
   authToken: string;
