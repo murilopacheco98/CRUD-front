@@ -14,7 +14,6 @@ import {
   FormControlLabel,
   Grid,
   IconButton,
-  Typography,
 } from "@mui/material";
 import { Stack } from "@mui/system";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
@@ -31,6 +30,7 @@ import {
   updateRecado,
 } from "../../store/modules/recados/RecadosSlice";
 import { SearchBar } from "../SearchBar/SearchBar";
+import SmartText from "../seeMore/seeMore";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -65,20 +65,26 @@ export const TabelaSearch = () => {
   const [status, setStatus] = useState<string>(statusPage);
   const [render, setRender] = useState<boolean>(false);
   const [assunto, setAssunto] = useState<string>(assuntoPage);
-
+  const [windowWidth, setWindowWidth] = useState<number>(0);
   const user = Object.values(useAppSelector((store) => store.users.entities));
+
+  const handleWindowResize = () => {
+    setWindowWidth(window.innerWidth);
+  };
+  window.addEventListener("load", handleWindowResize);
+  window.addEventListener("resize", handleWindowResize);
 
   const handleFunction = () => {
     setRender(!render);
   };
 
-  useEffect(() => undefined, [arquivar]);
+  // useEffect(() => undefined, [arquivar]);
 
   useEffect(() => {
     if (user[0]) {
       dispatch(getRecadosSearch({ id: user[0].id, search: assunto, status }));
     }
-  }, [render]);
+  }, [render, arquivar]);
 
   const openModal = () => {
     setModal(true);
@@ -133,13 +139,11 @@ export const TabelaSearch = () => {
   };
 
   const listaRecadosRdx = useAppSelector(selectAll);
-  // const user = Object.values(useAppSelector((store) => store.users.entities));
 
   return (
     <>
       <Grid container>
         <Grid item xs={12}>
-          {/* <Container sx={{ mt: 3 }}> */}
           <div className="justify-center flex mt-7">
             <SearchBar
               search={true}
@@ -151,7 +155,6 @@ export const TabelaSearch = () => {
               id={user[0] ? user[0].id : 0}
             />
           </div>
-          {/* </Container> */}
           <Container sx={{ mt: 3 }}>
             <div className="justify-around flex">
               <FormControlLabel
@@ -185,120 +188,59 @@ export const TabelaSearch = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {listaRecadosRdx.map((recado: RecadoApi) => (
+                  {listaRecadosRdx?.map((recado: RecadoApi) => (
                     <StyledTableRow key={recado.id}>
-                      {arquivar
-                        ? (() => {
-                            if (recado.arquivado === true) {
-                              return (
-                                <>
-                                  <StyledTableCell>
-                                    <Typography variant="h5">
-                                      <b>{recado.id}</b>
-                                    </Typography>
-                                  </StyledTableCell>
-                                  <StyledTableCell align="center">
-                                    {recado.status}
-                                  </StyledTableCell>
-                                  <StyledTableCell align="center">
-                                    {recado.assunto}
-                                  </StyledTableCell>
-                                  <StyledTableCell align="center">
-                                    {recado.descricao}
-                                  </StyledTableCell>
-                                  <StyledTableCell align="center">
-                                    <Stack
-                                      direction="row"
-                                      spacing={0}
-                                      sx={{
-                                        display: "flex",
-                                        justifyContent: "center",
-                                      }}
-                                    >
-                                      <IconButton
-                                        onClick={() => deletarRecado(recado)}
-                                      >
-                                        <DeleteForeverIcon
-                                          sx={{ fontSize: 35 }}
-                                        />
-                                      </IconButton>
-                                      <IconButton
-                                        onClick={() => editarRecado(recado.id)}
-                                      >
-                                        <EditIcon sx={{ fontSize: 35 }} />
-                                      </IconButton>
-                                      <IconButton
-                                        onClick={() =>
-                                          desarquivarRecado(recado)
-                                        }
-                                      >
-                                        <UnarchiveIcon sx={{ fontSize: 35 }} />
-                                      </IconButton>
-                                    </Stack>
-                                  </StyledTableCell>
-                                </>
-                              );
-                            }
-                          })()
-                        : (() => {
-                            if (recado.arquivado === false) {
-                              return (
-                                <>
-                                  <StyledTableCell className="border-r-2">
-                                    <Typography variant="h5">
-                                      <b>{recado.id}</b>
-                                    </Typography>
-                                  </StyledTableCell>
-                                  <StyledTableCell
-                                    align="center"
-                                    className="border-r-2"
-                                  >
-                                    {recado.status}
-                                  </StyledTableCell>
-                                  <StyledTableCell
-                                    align="center"
-                                    className="border-r-2"
-                                  >
-                                    {recado.assunto}
-                                  </StyledTableCell>
-                                  <StyledTableCell
-                                    align="center"
-                                    className="border-r-2"
-                                  >
-                                    {recado.descricao}
-                                  </StyledTableCell>
-                                  <StyledTableCell align="center">
-                                    <Stack
-                                      direction="row"
-                                      spacing={0}
-                                      sx={{
-                                        display: "flex",
-                                        justifyContent: "center",
-                                      }}
-                                    >
-                                      <IconButton
-                                        onClick={() => deletarRecado(recado)}
-                                      >
-                                        <DeleteForeverIcon
-                                          sx={{ fontSize: 30 }}
-                                        />
-                                      </IconButton>
-                                      <IconButton
-                                        onClick={() => editarRecado(recado.id)}
-                                      >
-                                        <EditIcon sx={{ fontSize: 30 }} />
-                                      </IconButton>
-                                      <IconButton
-                                        onClick={() => arquivarRecado(recado)}
-                                      >
-                                        <ArchiveIcon sx={{ fontSize: 30 }} />
-                                      </IconButton>
-                                    </Stack>
-                                  </StyledTableCell>
-                                </>
-                              );
-                            }
-                          })()}
+                      <>
+                        <StyledTableCell className="border-r-2">
+                          <div className="text-[14px]">{recado.createdAt}</div>
+                        </StyledTableCell>
+                        <StyledTableCell align="center" className="border-r-2">
+                          {recado.status}
+                        </StyledTableCell>
+                        <StyledTableCell align="center" className="border-r-2">
+                          {recado.assunto}
+                        </StyledTableCell>
+                        <StyledTableCell
+                          sx={{ padding: "10px" }}
+                          align="center"
+                          className="border-r-2"
+                        >
+                          <SmartText
+                            text={recado.descricao}
+                            length={windowWidth != 0 ? windowWidth / 12 : 130}
+                          />
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <Stack
+                            direction="row"
+                            spacing={0}
+                            sx={{
+                              display: "flex",
+                              justifyContent: "center",
+                            }}
+                          >
+                            <IconButton onClick={() => deletarRecado(recado)}>
+                              <DeleteForeverIcon sx={{ fontSize: 30 }} />
+                            </IconButton>
+                            <IconButton onClick={() => editarRecado(recado.id)}>
+                              <EditIcon sx={{ fontSize: 30 }} />
+                            </IconButton>
+                            <IconButton
+                              onClick={() =>
+                                arquivar
+                                  ? desarquivarRecado(recado)
+                                  : arquivarRecado(recado)
+                              }
+                            >
+                              {arquivar ? (
+                                <UnarchiveIcon sx={{ fontSize: 30 }} />
+                              ) : (
+                                <ArchiveIcon sx={{ fontSize: 30 }} />
+                              )}
+                            </IconButton>
+                          </Stack>
+                        </StyledTableCell>
+                      </>
                     </StyledTableRow>
                   ))}
                 </TableBody>

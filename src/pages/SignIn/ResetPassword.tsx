@@ -52,7 +52,7 @@ export const ResetPassword = () => {
     setError(false);
     const { password } = values;
     const usuario = await dispatch(
-      resetPassword({ newPassword: password, resetPasswordToken: url[4] }).
+      resetPassword({ newPassword: password, resetPasswordToken: url[4] })
     );
     if (usuario.payload == "Senha alterada com sucesso.") {
       setLoading(false);

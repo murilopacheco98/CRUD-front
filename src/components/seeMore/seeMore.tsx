@@ -1,9 +1,9 @@
-import React from 'react';
+import React from "react";
 
 type SmartTextProps = {
-  text: string,
-  length: number
-}
+  text: string;
+  length: number;
+};
 const SmartText = ({ text, length }: SmartTextProps) => {
   const [showLess, setShowLess] = React.useState(true);
 
@@ -13,20 +13,21 @@ const SmartText = ({ text, length }: SmartTextProps) => {
 
   return (
     <div>
-      <p
-        dangerouslySetInnerHTML={{
-          __html: showLess ? `${text.slice(0, length)}...` : text,
-        }}
-      ></p>
-      <a
-        style={{ color: "blue", cursor: "pointer" }}
-        onClick={() => setShowLess(!showLess)}
-      >
-        &nbsp;View {showLess ? "More..." : "Less"}
-      </a>
+      <div className="">
+        <p
+          dangerouslySetInnerHTML={{
+            __html: showLess ? `${text.slice(0, length)}...` : text,
+          }}
+        />
+        <a
+          style={{ color: "blue", cursor: "pointer" }}
+          onClick={() => setShowLess(!showLess)}
+        >
+          &nbsp;View {showLess ? "More..." : "Less"}
+        </a>
+      </div>
     </div>
   );
 };
-
 
 export default SmartText;

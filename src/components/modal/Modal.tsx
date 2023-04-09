@@ -23,7 +23,7 @@ interface ModalRecadoProps {
   actionCancel: () => void;
   idEdition?: number;
   edition: boolean;
-  user: any;
+  user: UserApi | undefined;
 }
 
 const ModalRecado: React.FC<ModalRecadoProps> = (props) => {
@@ -38,9 +38,15 @@ const ModalRecado: React.FC<ModalRecadoProps> = (props) => {
   const [arquivar, setArquivar] = useState<boolean>(false);
 
   const salvarRecado = () => {
-    if (user.authToken) {
+    if (user) {
       dispatch(
-        postRecado({ assunto, descricao, arquivado: false, status, user })
+        postRecado({
+          assunto,
+          descricao,
+          arquivado: false,
+          status,
+          userId: user.id,
+        })
       );
       closeModal();
       setAssunto("");

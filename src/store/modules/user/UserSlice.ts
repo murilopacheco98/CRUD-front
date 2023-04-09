@@ -11,13 +11,10 @@ import { SignInDto, SignUpDto } from "../../../types/Users";
 export interface UserApi {
   id: number;
   email: string;
-  password: string;
-  name: string;
   qtdRecadosArquivados: number;
   qtdRecadosDesarquivados: number;
-  createdAt: string;
-  updateAt: string | null;
   authToken: string;
+  enable: boolean;
 }
 
 export const getAllUsers = createAsyncThunk("users/getAll", async () => {
@@ -79,6 +76,60 @@ export const deleteUser = createAsyncThunk(
   }
 );
 
+export const confirmEmail = createAsyncThunk(
+  "user/confirm-email",
+  async (checkerCode: string) => {
+    const response = await api
+      .post(`/user/confirm-email/${checkerCode}`)
+      .then((users: AxiosResponse) => users.data)
+      .catch((erro: AxiosResponse) => erro);
+    return response;
+  }
+);
+
+interface ResendConfirmEmailProps {
+  email: string;
+}
+
+export const resendConfirmEmail = createAsyncThunk(
+  "user/resend/confirm-email",
+  async (input: ResendConfirmEmailProps) => {
+    const { email } = input;
+    const response = await api
+      .get(`/user/resend/confirm-email/${email}`)
+      .then((users: AxiosResponse) => users.data)
+      .catch((erro: AxiosResponse) => erro);
+    return response;
+  }
+);
+
+interface ResetPasswordProps {
+  resetPasswordToken: string;
+  newPassword: string;
+}
+
+export const resetPassword = createAsyncThunk(
+  "user/reset-password",
+  async (input: ResetPasswordProps) => {
+    const response = await api
+      .post("/user/reset-password", input)
+      .then((users: AxiosResponse) => users.data)
+      .catch((erro: AxiosResponse) => erro);
+    return response;
+  }
+);
+
+export const sendEmailResetPassword = createAsyncThunk(
+  "user/email/reset-password",
+  async (email: string) => {
+    const response = await api
+      .get(`/user/email/reset-password/${email}`)
+      .then((users: AxiosResponse) => users.data)
+      .catch((erro: AxiosResponse) => erro);
+    return response;
+  }
+);
+
 export const logout = createAsyncThunk("user/logout", async () => {
   const response = console.log("Logout success.");
   return response;
@@ -93,7 +144,7 @@ export const { selectAll, selectById, selectEntities, selectIds } =
 
 const UsersSlice = createSlice({
   name: "users",
-  initialState: adapter.getInitialState({ loading: true }),
+  initialState: adapter.getInitialState({ loading: false, error: false }),
   reducers: {
     addOne: adapter.addOne, // post - create
     updateOne: adapter.updateOne, // put - update
@@ -107,6 +158,10 @@ const UsersSlice = createSlice({
     builder.addCase(postUserRegister.fulfilled, (state) => {
       state.loading = false;
       // adapter.addOne(state, action.payload); // post, create + addOne na store
+    });
+    builder.addCase(postUserLogin.rejected, (state) => {
+      state.loading = false;
+      state.error = true;
     });
     builder.addCase(postUserLogin.fulfilled, (state, action) => {
       state.loading = false;

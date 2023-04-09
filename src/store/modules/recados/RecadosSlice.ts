@@ -85,7 +85,7 @@ export const postRecado = createAsyncThunk(
   "recados/postRecado",
   async (props: RecadoSemId) => {
     const response = await api
-      .post(`/recados/create/${props.user.id}`, props)
+      .post(`/recados/create`, props)
       .then((recados: AxiosResponse) => recados.data)
       .catch((erro: AxiosResponse) => erro);
     return response;

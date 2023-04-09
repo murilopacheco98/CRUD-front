@@ -101,29 +101,3 @@ export const Button = styled.div`
   background: #b3daf2;
   color: black;
 `;
-
-// @media (max-width: 950px){
-//   .card-login{
-//     width: 100%;
-//   }
-// }
-
-// @media (max-width: 600px){
-//   .body{
-//     flex-direction: column;
-//   }
-
-//   .left-login {
-//     width: 100%;
-//     height: auto;
-//   }
-
-//   .right-login {
-//     width: 100%;
-//     height: auto;
-//   }
-
-//   .card-login {
-//     width: 90%;
-
-//   }
