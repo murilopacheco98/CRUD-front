@@ -1,14 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import * as Yup from "yup";
 import { useState } from "react";
 import { useFormik, Form, FormikProvider } from "formik";
-// import { useNavigate } from "react-router-dom";
 import { TextField, IconButton, Button } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { postUserLogin } from "../../store/modules/user/UserSlice";
-import { useAppDispatch } from "../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { ClipLoader } from "react-spinners";
+import { useNavigate } from "react-router-dom";
 
 interface Values {
   email: string;
@@ -16,12 +16,20 @@ interface Values {
 }
 
 export const SignIn = () => {
-  // const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const dispatch = useAppDispatch();
   const [error, setError] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [response, setResponse] = useState<string>("");
+
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const user = Object.values(useAppSelector((store) => store.users.entities));
+
+  useEffect(() => {
+    if (user[0] != undefined) {
+      navigate("/recados/page=1");
+    }
+  }, []);
 
   const login = async (values: Values) => {
     setLoading(true);

@@ -18,7 +18,7 @@ type SearchBarProps = {
 
 export const SearchBar = (props: SearchBarProps) => {
   const navigate = useNavigate();
-  const { id, setAssunto, handleFunction, assunto, status, setStatus } = props;
+  const { setAssunto, handleFunction, assunto, status, setStatus } = props;
 
   return (
     <ContainerSearch>
@@ -31,7 +31,8 @@ export const SearchBar = (props: SearchBarProps) => {
         value={assunto}
         onKeyDown={(e: { key: string }) => {
           if (e.key === "Enter") {
-            navigate(`/recado/${id}?search=${assunto}/${status}`);
+            navigate(`/search=${assunto}/${status}`);
+            // navigate(`/recado/${id}?search=${assunto}/${status}`);
             // setSearch(inputValue);
           }
         }}

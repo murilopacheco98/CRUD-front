@@ -41,9 +41,9 @@ export const Navbar = ({ user }: NavbarProps) => {
     setOpen(false);
   };
 
-  const logoutUser = () => {
-    dispatch(logoutRecado());
-    dispatch(logout());
+  const logoutUser = async () => {
+    await dispatch(logoutRecado());
+    await dispatch(logout());
     navigate("/");
   };
 

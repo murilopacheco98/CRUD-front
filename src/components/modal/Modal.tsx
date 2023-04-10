@@ -49,15 +49,7 @@ const ModalRecado: React.FC<ModalRecadoProps> = (props) => {
         })
       );
       closeModal();
-      setAssunto("");
-      setDescricao("");
-      setStatus("em-andamento");
     }
-  };
-
-  const closeModal = () => {
-    actionCancel();
-    setOpenModal(false);
   };
 
   const editarRecado = () => {
@@ -76,16 +68,20 @@ const ModalRecado: React.FC<ModalRecadoProps> = (props) => {
         })
       );
     }
-
     closeModal();
+  };
+
+  const closeModal = () => {
+    actionCancel();
     setAssunto("");
     setDescricao("");
-    setArquivar(false);
+    setStatus("em-andamento");
+    setOpenModal(false);
   };
 
   useEffect(() => {
     setOpenModal(isOpen);
-    if (idEdition) {
+    if (edition && idEdition) {
       setIdEdicao(idEdition);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -94,7 +90,7 @@ const ModalRecado: React.FC<ModalRecadoProps> = (props) => {
   const recadoEncontrado = useAppSelector((item) => selectById(item, idEdicao));
 
   useEffect(() => {
-    if (recadoEncontrado) {
+    if (edition && recadoEncontrado) {
       setAssunto(recadoEncontrado.assunto);
       setDescricao(recadoEncontrado.descricao);
       setStatus(recadoEncontrado.status);
