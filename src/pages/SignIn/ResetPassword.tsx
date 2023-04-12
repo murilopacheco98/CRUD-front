@@ -101,7 +101,7 @@ export const ResetPassword = () => {
     <div className="h-[100vh] w-[100vw] text-center flex items-center justify-center bg-blue-200">
       {loading && (
         <div className="absolute z-10">
-          <ClipLoader color={"#010227"} size={80} />
+          <ClipLoader color={"#bdbecd"} size={60} />
         </div>
       )}
       <div className="shadow-4xl w-[100%] sm:w-[450px] text-center items-center justify-center border-black border-solid border-[2px] rounded-lg p-5 bg-white">

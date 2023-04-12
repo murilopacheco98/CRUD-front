@@ -9,9 +9,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import {
   Button,
-  Checkbox,
   Container,
-  FormControlLabel,
   Grid,
   IconButton,
   Pagination,
@@ -56,7 +54,12 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-export const TabelaSearch = () => {
+interface TabelaSearchProps {
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export const TabelaSearch = (props: TabelaSearchProps) => {
+  const { setLoading } = props;
   const url = window.location.href.split("/");
   const assuntoPage = url[3].split("=")[1];
   const statusPage = url[4];
@@ -76,9 +79,8 @@ export const TabelaSearch = () => {
   const [assunto, setAssunto] = useState<string>(assuntoPage);
   const [windowWidth, setWindowWidth] = useState<number>(0);
   const [nadaEncontrado, setNadaEncontrado] = useState<boolean>(false);
-  const [error, setError] = useState<boolean>(false);
-  const [response, setResponse] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
+  // const [error, setError] = useState<boolean>(false);
+  // const [response, setResponse] = useState<string>("");
 
   const user = Object.values(useAppSelector((store) => store.users.entities));
 
@@ -101,12 +103,13 @@ export const TabelaSearch = () => {
 
   useEffect(() => {
     const recados = async () => {
-      setError(false);
+      // setError(false);
+      setNadaEncontrado(false);
       setLoading(true);
       const getRecados = await dispatch(
         getRecadosSearch({
           id: user[0] ? user[0].id : 0,
-          search: assunto,
+          search: assunto == "" ? "todos" : assunto,
           status: status,
           page: page - 1,
           size: 10,
@@ -114,12 +117,14 @@ export const TabelaSearch = () => {
       );
       if (getRecados.payload.totalElements > 0) {
         setLoading(false);
-        setPage(Math.ceil(getRecados.payload.data.totalElements / 10));
+        setPage(Math.ceil(getRecados.payload.totalElements / 10));
       } else if (getRecados.payload.totalElements == 0) {
+        setLoading(false);
         setNadaEncontrado(true);
       } else {
-        setError(true);
-        setResponse(getRecados.payload.response.data.message);
+        setLoading(false);
+        // setError(true);
+        // setResponse(getRecados.payload.response.data.message);
       }
     };
     recados();
@@ -196,17 +201,12 @@ export const TabelaSearch = () => {
           </div>
           <Container sx={{ mt: 3 }}>
             <div className="justify-around flex">
-              {/* <FormControlLabel
-                control={<Checkbox />}
-                onClick={() => setArquivar(!arquivar)}
-                label="ARQUIVADOS"
-              /> */}
               <Button variant="contained" sx={{ mb: 2 }} onClick={openModal}>
                 ADICIONAR RECADO
               </Button>
             </div>
             {nadaEncontrado && (
-              <div className="flex ml-[5%] w-[100%] justify-start mt-[20px] text-[24px]">
+              <div className="flex ml-[5%] w-[90%] justify-start mt-[20px] text-[24px]">
                 Nenhum recado foi encontrado.
               </div>
             )}

@@ -46,13 +46,18 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
+interface TabelaSearchProps {
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
   },
 }));
 
-export const Tabela = () => {
+export const Tabela = (props: TabelaSearchProps) => {
+  const { setLoading } = props;
   const dispatch = useAppDispatch();
 
   const url = window.location.href.split("/");
@@ -68,6 +73,8 @@ export const Tabela = () => {
   const [assunto, setAssunto] = useState<string>("");
   const [render, setRender] = useState<boolean>(false);
   const [windowWidth, setWindowWidth] = useState<number>(0);
+  const [page, setPage] = useState<number>(1);
+  const [nadaEncontrado, setNadaEncontrado] = useState<boolean>(false);
 
   const user = Object.values(useAppSelector((store) => store.users.entities));
 
@@ -85,34 +92,47 @@ export const Tabela = () => {
     setCurrentPage(value);
   };
 
-  // const size = 10;
-  let page = 1;
-  if (user[0] !== undefined) {
-    page = arquivar
-      ? Math.ceil(user[0].qtdRecadosArquivados / 10)
-      : Math.ceil(user[0].qtdRecadosDesarquivados / 10);
-  }
-
   useEffect(() => {
+    setLoading(true);
     if (user[0]) {
-      if (arquivar) {
-        dispatch(
-          getAllRecadosPageableArchive({
-            userId: user[0].id,
-            page: currentPage - 1,
-            size: 10,
-          })
-        );
-      } else {
-        dispatch(
-          getAllRecadosPageableUnarchive({
-            userId: user[0].id,
-            page: currentPage - 1,
-            size: 10,
-          })
-        );
-      }
+      const recados = async () => {
+        if (arquivar) {
+          const arquivados = await dispatch(
+            getAllRecadosPageableArchive({
+              userId: user[0] ? user[0].id : 0,
+              page: currentPage - 1,
+              size: 10,
+            })
+          );
+          if (arquivados.payload.totalElements > 0) {
+            setPage(Math.ceil(arquivados.payload.totalElements / 10));
+          } else if (arquivados.payload.totalElements == 0) {
+            setNadaEncontrado(true);
+          } else {
+            // setError(true);
+            // setResponse(getRecados.payload.response.data.message);
+          }
+        } else {
+          const desarquivados = await dispatch(
+            getAllRecadosPageableUnarchive({
+              userId: user[0] ? user[0].id : 0,
+              page: currentPage - 1,
+              size: 10,
+            })
+          );
+          if (desarquivados.payload.totalElements > 0) {
+            setPage(Math.ceil(desarquivados.payload.totalElements / 10));
+          } else if (desarquivados.payload.totalElements == 0) {
+            setNadaEncontrado(true);
+          } else {
+            // setError(true);
+            // setResponse(getRecados.payload.response.data.message);
+          }
+        }
+      };
+      recados();
     }
+    setLoading(false);
   }, [currentPage, arquivar, render]);
 
   const handleChange = () => {
@@ -147,7 +167,6 @@ export const Tabela = () => {
         assunto: recado.assunto,
         descricao: recado.descricao,
         arquivado: true,
-        // qtdRecados: recado.qtdRecados,
         createdAt: recado.createdAt,
         updatedAt: recado.updatedAt,
         userId: user[0] ? user[0]?.id : 0,
@@ -164,7 +183,6 @@ export const Tabela = () => {
         assunto: recado.assunto,
         descricao: recado.descricao,
         arquivado: false,
-        // qtdRecados: recado.qtdRecados,
         createdAt: recado.createdAt,
         updatedAt: recado.updatedAt,
         userId: user[0] ? user[0]?.id : 0,
@@ -204,104 +222,113 @@ export const Tabela = () => {
                 </Button>
               </div>
             </div>
-            <TableContainer component={Paper}>
-              <Table aria-label="customized table">
-                <TableHead className="h-10">
-                  <TableRow>
-                    <StyledTableCell align="center" className="w-[10%]">
-                      DATA
-                    </StyledTableCell>
-                    <StyledTableCell align="center" className="w-[10%]">
-                      STATUS
-                    </StyledTableCell>
-                    <StyledTableCell align="center" className="w-[25%]">
-                      ASSUNTO
-                    </StyledTableCell>
-                    <StyledTableCell align="center" className="w-[45%]">
-                      DESCRIÇÃO
-                    </StyledTableCell>
-                    <StyledTableCell align="center" className="w-[15%]">
-                      AÇÕES
-                    </StyledTableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {listaRecadosRdx[0] !== undefined &&
-                    listaRecadosRdx?.map((recado: RecadoApi) => (
-                      <StyledTableRow key={recado.id}>
-                        <>
-                          <StyledTableCell className="border-r-2">
-                            <div className="text-[14px]">
-                              {recado.createdAt}
-                            </div>
-                          </StyledTableCell>
-                          <StyledTableCell
-                            align="center"
-                            className="border-r-2"
-                          >
-                            {recado.status}
-                          </StyledTableCell>
-                          <StyledTableCell
-                            align="center"
-                            className="border-r-2"
-                          >
-                            {recado.assunto}
-                          </StyledTableCell>
-                          <StyledTableCell
-                            sx={{ padding: "10px" }}
-                            align="center"
-                            className="border-r-2"
-                          >
-                            <SmartText
-                              text={recado.descricao}
-                              length={windowWidth != 0 ? windowWidth / 12 : 130}
-                            />
-                          </StyledTableCell>
-                          <StyledTableCell>
-                            <Stack
-                              direction="row"
-                              spacing={0}
-                              sx={{
-                                display: "flex",
-                                justifyContent: "center",
-                                padding: "0px",
-                                margin: "0px",
-                              }}
+            {nadaEncontrado && (
+              <div className="flex ml-[5%] w-[90%] justify-start mt-[20px] text-[24px]">
+                Nenhum recado foi encontrado.
+              </div>
+            )}
+            {!nadaEncontrado && (
+              <TableContainer component={Paper}>
+                <Table aria-label="customized table">
+                  <TableHead className="h-10">
+                    <TableRow>
+                      <StyledTableCell align="center" className="w-[10%]">
+                        DATA
+                      </StyledTableCell>
+                      <StyledTableCell align="center" className="w-[10%]">
+                        STATUS
+                      </StyledTableCell>
+                      <StyledTableCell align="center" className="w-[25%]">
+                        ASSUNTO
+                      </StyledTableCell>
+                      <StyledTableCell align="center" className="w-[45%]">
+                        DESCRIÇÃO
+                      </StyledTableCell>
+                      <StyledTableCell align="center" className="w-[15%]">
+                        AÇÕES
+                      </StyledTableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {listaRecadosRdx[0] !== undefined &&
+                      listaRecadosRdx?.map((recado: RecadoApi) => (
+                        <StyledTableRow key={recado.id}>
+                          <>
+                            <StyledTableCell className="border-r-2">
+                              <div className="text-[14px]">
+                                {recado.createdAt}
+                              </div>
+                            </StyledTableCell>
+                            <StyledTableCell
+                              align="center"
+                              className="border-r-2"
                             >
-                              <IconButton
-                                sx={{ padding: "0px", marginRight: "5px" }}
-                                onClick={() => deletarRecado(recado)}
-                              >
-                                <DeleteForeverIcon sx={{ fontSize: 30 }} />
-                              </IconButton>
-                              <IconButton
-                                sx={{ padding: "0px", marginRight: "5px" }}
-                                onClick={() => editarRecado(recado.id)}
-                              >
-                                <EditIcon sx={{ fontSize: 30 }} />
-                              </IconButton>
-                              <IconButton
-                                sx={{ padding: "0px", margin: "0px" }}
-                                onClick={() =>
-                                  arquivar
-                                    ? desarquivarRecado(recado)
-                                    : arquivarRecado(recado)
+                              {recado.status}
+                            </StyledTableCell>
+                            <StyledTableCell
+                              align="center"
+                              className="border-r-2"
+                            >
+                              {recado.assunto}
+                            </StyledTableCell>
+                            <StyledTableCell
+                              sx={{ padding: "10px" }}
+                              align="center"
+                              className="border-r-2"
+                            >
+                              <SmartText
+                                text={recado.descricao}
+                                length={
+                                  windowWidth != 0 ? windowWidth / 12 : 130
                                 }
+                              />
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              <Stack
+                                direction="row"
+                                spacing={0}
+                                sx={{
+                                  display: "flex",
+                                  justifyContent: "center",
+                                  padding: "0px",
+                                  margin: "0px",
+                                }}
                               >
-                                {arquivar ? (
-                                  <UnarchiveIcon sx={{ fontSize: 30 }} />
-                                ) : (
-                                  <ArchiveIcon sx={{ fontSize: 30 }} />
-                                )}
-                              </IconButton>
-                            </Stack>
-                          </StyledTableCell>
-                        </>
-                      </StyledTableRow>
-                    ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+                                <IconButton
+                                  sx={{ padding: "0px", marginRight: "5px" }}
+                                  onClick={() => deletarRecado(recado)}
+                                >
+                                  <DeleteForeverIcon sx={{ fontSize: 30 }} />
+                                </IconButton>
+                                <IconButton
+                                  sx={{ padding: "0px", marginRight: "5px" }}
+                                  onClick={() => editarRecado(recado.id)}
+                                >
+                                  <EditIcon sx={{ fontSize: 30 }} />
+                                </IconButton>
+                                <IconButton
+                                  sx={{ padding: "0px", margin: "0px" }}
+                                  onClick={() =>
+                                    arquivar
+                                      ? desarquivarRecado(recado)
+                                      : arquivarRecado(recado)
+                                  }
+                                >
+                                  {arquivar ? (
+                                    <UnarchiveIcon sx={{ fontSize: 30 }} />
+                                  ) : (
+                                    <ArchiveIcon sx={{ fontSize: 30 }} />
+                                  )}
+                                </IconButton>
+                              </Stack>
+                            </StyledTableCell>
+                          </>
+                        </StyledTableRow>
+                      ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            )}
             {/* eslint-disable react/jsx-props-no-spreading */}
             <PaginationContainer>
               <Pagination

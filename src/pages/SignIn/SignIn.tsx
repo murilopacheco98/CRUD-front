@@ -78,7 +78,7 @@ export const SignIn = () => {
     <div className="h-[100vh] w-[100vw] text-center flex items-center justify-center bg-blue-200">
       {loading && (
         <div className="absolute z-10">
-          <ClipLoader color={"#010227"} size={80} />
+          <ClipLoader color={"#bdbecd"} size={60} />
         </div>
       )}
       <div>

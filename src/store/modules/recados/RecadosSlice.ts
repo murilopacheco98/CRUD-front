@@ -7,7 +7,6 @@ import { api } from "../../../service/api/api";
 import RecadoSemId from "../../../types/Recado";
 import { RootState } from "../..";
 import { AxiosResponse } from "axios";
-import { UserApi } from "../user/UserSlice";
 
 export interface RecadoApi {
   id: number;
