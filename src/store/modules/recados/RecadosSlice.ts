@@ -14,11 +14,11 @@ export interface RecadoApi {
   assunto: string;
   descricao: string;
   arquivado: boolean;
-  qtdRecados: number;
+  // qtdRecados: number;
   status: string;
   createdAt: any;
   updatedAt: any;
-  user: UserApi;
+  userId: number;
 }
 
 interface pageableProps {
@@ -32,7 +32,9 @@ export const getAllRecadosPageableArchive = createAsyncThunk(
   async (props: pageableProps) => {
     const { userId, page, size } = props;
     const response = await api
-      .get(`/recados/pageable/archive/${userId}?page=${page}&size=${size}`)
+      .get(
+        `/recados/pageable/archive/${userId}?page=${page}&size=${size}&sort=id,desc`
+      )
       .then((recados: AxiosResponse) => {
         return recados.data.content;
       })
@@ -48,7 +50,9 @@ export const getAllRecadosPageableUnarchive = createAsyncThunk(
   async (props: pageableProps) => {
     const { userId, page, size } = props;
     const response = await api
-      .get(`/recados/pageable/unarchive/${userId}?page=${page}&size=${size}`)
+      .get(
+        `/recados/pageable/unarchive/${userId}?page=${page}&size=${size}&sort=id,desc`
+      )
       .then((recados: AxiosResponse) => {
         return recados.data.content;
       })
@@ -63,12 +67,14 @@ export interface searchProps {
   id: number;
   search: string;
   status: string;
+  page: number;
+  size: number;
 }
 
 export const getRecadosSearch = createAsyncThunk(
   "recados/getAllRecadosSearch",
   async (dataSearch: searchProps) => {
-    const requestParam = `/recados/${dataSearch.id}?search=${dataSearch.search}&status=${dataSearch.status}`;
+    const requestParam = `/recados/${dataSearch.id}/${dataSearch.search}/${dataSearch.status}?page=${dataSearch.page}&size=${dataSearch.size}&sort=id,desc`;
     const response = await api
       .get(requestParam)
       .then((recados: AxiosResponse) => {
@@ -95,8 +101,8 @@ export const postRecado = createAsyncThunk(
 export const updateRecado = createAsyncThunk(
   "recados/updateRecado",
   async (dado: RecadoApi) => {
-    const { id, user } = dado;
-    const url = `/recados/${user.id}/${id}`;
+    const { id, userId } = dado;
+    const url = `/recados/${userId}/${id}`;
     const response = await api
       .post(url, dado)
       .then((recados: AxiosResponse) => recados.data)
@@ -108,9 +114,9 @@ export const updateRecado = createAsyncThunk(
 export const deleteRecado = createAsyncThunk(
   "recados/deleteRecado",
   async (dado: RecadoApi) => {
-    const { id, user } = dado;
+    const { id, userId } = dado;
     const response = await api
-      .delete(`/recados/${user.id}/${id}`)
+      .delete(`/recados/${userId}/${id}`)
       .then((recados: AxiosResponse) => recados.data)
       .catch((erro: AxiosResponse) => erro);
     return response;
@@ -151,7 +157,7 @@ const RecadosSlice = createSlice({
     );
     builder.addCase(getRecadosSearch.fulfilled, (state, action) => {
       state.loading = false;
-      adapter.setAll(state, action.payload); // get, read + seleciona todos na store
+      adapter.setAll(state, action.payload.content); // get, read + seleciona todos na store
     });
     builder.addCase(postRecado.fulfilled, (state, action) => {
       state.loading = false;

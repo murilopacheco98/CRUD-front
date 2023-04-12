@@ -14,11 +14,21 @@ type SearchBarProps = {
   handleFunction?: any;
   status: string;
   setStatus: React.Dispatch<React.SetStateAction<string>>;
+  setRender?: React.Dispatch<React.SetStateAction<boolean>>;
+  render?: boolean;
 };
 
 export const SearchBar = (props: SearchBarProps) => {
   const navigate = useNavigate();
-  const { setAssunto, handleFunction, assunto, status, setStatus } = props;
+  const {
+    render,
+    setRender,
+    setAssunto,
+    handleFunction,
+    assunto,
+    status,
+    setStatus,
+  } = props;
 
   return (
     <ContainerSearch>
@@ -31,9 +41,9 @@ export const SearchBar = (props: SearchBarProps) => {
         value={assunto}
         onKeyDown={(e: { key: string }) => {
           if (e.key === "Enter") {
-            navigate(`/search=${assunto}/${status}`);
-            // navigate(`/recado/${id}?search=${assunto}/${status}`);
-            // setSearch(inputValue);
+            navigate(`/search=${assunto}/${status}/page=1`);
+            setRender && setRender(!render);
+            // window.location.href = `/search=${assunto}/${status}/page=1`;
           }
         }}
       />
@@ -51,7 +61,7 @@ export const SearchBar = (props: SearchBarProps) => {
         </Select>
       </div>
       <div className="rounded-xl border-solid border-[0.5px] border-gray-100">
-        <Link to={`/search=${assunto}/${status}`}>
+        <Link to={`/search=${assunto}/${status}/page=1`}>
           <Button onClick={handleFunction}>
             <SearchIcon sx={{ fontSize: 42 }} />
           </Button>

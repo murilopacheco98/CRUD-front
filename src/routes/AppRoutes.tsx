@@ -55,7 +55,7 @@ const AppRoutes: React.FC = () => {
             }
           />
           <Route
-            path="/search=:assunto/:status"
+            path="/search=:assunto/:status/page=:page"
             element={
               <Protected>
                 <HomeSearch />
@@ -63,7 +63,7 @@ const AppRoutes: React.FC = () => {
             }
           />
           <Route
-            path="/search=/:status"
+            path="/search=/:status/page:page"
             element={
               <Protected>
                 <HomeSearch />

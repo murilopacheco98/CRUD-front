@@ -53,7 +53,7 @@ const ModalRecado: React.FC<ModalRecadoProps> = (props) => {
   };
 
   const editarRecado = () => {
-    if (recadoEncontrado) {
+    if (recadoEncontrado && user) {
       dispatch(
         updateRecado({
           id: recadoEncontrado.id,
@@ -61,10 +61,10 @@ const ModalRecado: React.FC<ModalRecadoProps> = (props) => {
           assunto: assunto,
           descricao: descricao,
           arquivado: arquivar,
-          qtdRecados: recadoEncontrado.qtdRecados,
+          // qtdRecados: recadoEncontrado.qtdRecados,
           createdAt: recadoEncontrado.createdAt,
           updatedAt: recadoEncontrado.updatedAt,
-          user: recadoEncontrado.user,
+          userId: user.id,
         })
       );
     }

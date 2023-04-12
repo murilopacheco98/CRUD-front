@@ -85,9 +85,8 @@ export const Tabela = () => {
     setCurrentPage(value);
   };
 
-  const size = 10;
+  // const size = 10;
   let page = 1;
-
   if (user[0] !== undefined) {
     page = arquivar
       ? Math.ceil(user[0].qtdRecadosArquivados / 10)
@@ -101,7 +100,7 @@ export const Tabela = () => {
           getAllRecadosPageableArchive({
             userId: user[0].id,
             page: currentPage - 1,
-            size,
+            size: 10,
           })
         );
       } else {
@@ -109,11 +108,10 @@ export const Tabela = () => {
           getAllRecadosPageableUnarchive({
             userId: user[0].id,
             page: currentPage - 1,
-            size,
+            size: 10,
           })
         );
       }
-      console.log("passei aqui 2");
     }
   }, [currentPage, arquivar, render]);
 
@@ -149,10 +147,10 @@ export const Tabela = () => {
         assunto: recado.assunto,
         descricao: recado.descricao,
         arquivado: true,
-        qtdRecados: recado.qtdRecados,
+        // qtdRecados: recado.qtdRecados,
         createdAt: recado.createdAt,
         updatedAt: recado.updatedAt,
-        user: recado.user,
+        userId: user[0] ? user[0]?.id : 0,
       })
     );
     setRender(!render);
@@ -166,10 +164,10 @@ export const Tabela = () => {
         assunto: recado.assunto,
         descricao: recado.descricao,
         arquivado: false,
-        qtdRecados: recado.qtdRecados,
+        // qtdRecados: recado.qtdRecados,
         createdAt: recado.createdAt,
         updatedAt: recado.updatedAt,
-        user: recado.user,
+        userId: user[0] ? user[0]?.id : 0,
       })
     );
     setRender(!render);
@@ -266,17 +264,24 @@ export const Tabela = () => {
                               sx={{
                                 display: "flex",
                                 justifyContent: "center",
+                                padding: "0px",
+                                margin: "0px",
                               }}
                             >
-                              <IconButton onClick={() => deletarRecado(recado)}>
+                              <IconButton
+                                sx={{ padding: "0px", marginRight: "5px" }}
+                                onClick={() => deletarRecado(recado)}
+                              >
                                 <DeleteForeverIcon sx={{ fontSize: 30 }} />
                               </IconButton>
                               <IconButton
+                                sx={{ padding: "0px", marginRight: "5px" }}
                                 onClick={() => editarRecado(recado.id)}
                               >
                                 <EditIcon sx={{ fontSize: 30 }} />
                               </IconButton>
                               <IconButton
+                                sx={{ padding: "0px", margin: "0px" }}
                                 onClick={() =>
                                   arquivar
                                     ? desarquivarRecado(recado)
