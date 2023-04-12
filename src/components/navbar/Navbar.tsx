@@ -79,7 +79,7 @@ export const Navbar = ({ user }: NavbarProps) => {
 
   return (
     <>
-      <div className="w-[100%] bg-blue-500 h-[125px] flex justify-center items-center">
+      <div className="w-[100%] bg-blue-500 h-[115px] flex justify-center items-center">
         <div className="w-[70%] ml-[15%] h-[100px] flex flex-col justify-center items-center">
           <div>
             <Link to={`/recados/page=1`} className="flex items-center">

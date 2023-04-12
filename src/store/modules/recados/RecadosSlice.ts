@@ -35,7 +35,7 @@ export const getAllRecadosPageableArchive = createAsyncThunk(
         `/recados/pageable/archive/${userId}?page=${page}&size=${size}&sort=id,desc`
       )
       .then((recados: AxiosResponse) => {
-        return recados.data.content;
+        return recados.data;
       })
       .catch((erro: AxiosResponse) => {
         return erro;
@@ -53,7 +53,7 @@ export const getAllRecadosPageableUnarchive = createAsyncThunk(
         `/recados/pageable/unarchive/${userId}?page=${page}&size=${size}&sort=id,desc`
       )
       .then((recados: AxiosResponse) => {
-        return recados.data.content;
+        return recados.data;
       })
       .catch((erro: AxiosResponse) => {
         return erro;
@@ -145,13 +145,13 @@ const RecadosSlice = createSlice({
   extraReducers(builder) {
     builder.addCase(getAllRecadosPageableArchive.fulfilled, (state, action) => {
       state.loading = false;
-      adapter.setAll(state, action.payload); // get, read + seleciona todos na store
+      adapter.setAll(state, action.payload.content); // get, read + seleciona todos na store
     });
     builder.addCase(
       getAllRecadosPageableUnarchive.fulfilled,
       (state, action) => {
         state.loading = false;
-        adapter.setAll(state, action.payload); // get, read + seleciona todos na store
+        adapter.setAll(state, action.payload.content); // get, read + seleciona todos na store
       }
     );
     builder.addCase(getRecadosSearch.fulfilled, (state, action) => {

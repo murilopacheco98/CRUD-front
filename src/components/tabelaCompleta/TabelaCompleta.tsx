@@ -94,6 +94,7 @@ export const Tabela = (props: TabelaSearchProps) => {
 
   useEffect(() => {
     setLoading(true);
+    setNadaEncontrado(false);
     if (user[0]) {
       const recados = async () => {
         if (arquivar) {
@@ -172,6 +173,10 @@ export const Tabela = (props: TabelaSearchProps) => {
         userId: user[0] ? user[0]?.id : 0,
       })
     );
+    console.log(listaRecadosRdx.length);
+    if (listaRecadosRdx.length == 0) {
+      setNadaEncontrado(true);
+    }
     setRender(!render);
   };
 
@@ -188,6 +193,10 @@ export const Tabela = (props: TabelaSearchProps) => {
         userId: user[0] ? user[0]?.id : 0,
       })
     );
+    console.log(listaRecadosRdx.length);
+    if (listaRecadosRdx.length == 0) {
+      setNadaEncontrado(true);
+    }
     setRender(!render);
   };
 
@@ -222,11 +231,16 @@ export const Tabela = (props: TabelaSearchProps) => {
                 </Button>
               </div>
             </div>
-            {nadaEncontrado && (
-              <div className="flex ml-[5%] w-[90%] justify-start mt-[20px] text-[24px]">
-                Nenhum recado foi encontrado.
-              </div>
-            )}
+            {nadaEncontrado &&
+              (arquivar ? (
+                <div className="flex ml-[5%] w-[90%] justify-start mt-[30px] text-[24px]">
+                  Você não possui recado arquivado.
+                </div>
+              ) : (
+                <div className="flex ml-[5%] w-[90%] justify-start mt-[30px] text-[24px]">
+                  Você não possui recado desarquivado.
+                </div>
+              ))}
             {!nadaEncontrado && (
               <TableContainer component={Paper}>
                 <Table aria-label="customized table">
@@ -250,102 +264,101 @@ export const Tabela = (props: TabelaSearchProps) => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {listaRecadosRdx[0] !== undefined &&
-                      listaRecadosRdx?.map((recado: RecadoApi) => (
-                        <StyledTableRow key={recado.id}>
-                          <>
-                            <StyledTableCell className="border-r-2">
-                              <div className="text-[14px]">
-                                {recado.createdAt}
-                              </div>
-                            </StyledTableCell>
-                            <StyledTableCell
-                              align="center"
-                              className="border-r-2"
+                    {listaRecadosRdx?.map((recado: RecadoApi) => (
+                      <StyledTableRow key={recado.id}>
+                        <>
+                          <StyledTableCell className="border-r-2">
+                            <div className="text-[14px]">
+                              {recado.createdAt}
+                            </div>
+                          </StyledTableCell>
+                          <StyledTableCell
+                            align="center"
+                            className="border-r-2"
+                          >
+                            {recado.status}
+                          </StyledTableCell>
+                          <StyledTableCell
+                            align="center"
+                            className="border-r-2"
+                          >
+                            {recado.assunto}
+                          </StyledTableCell>
+                          <StyledTableCell
+                            sx={{ padding: "10px" }}
+                            align="center"
+                            className="border-r-2"
+                          >
+                            <SmartText
+                              text={recado.descricao}
+                              length={windowWidth != 0 ? windowWidth / 12 : 130}
+                            />
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <Stack
+                              direction="row"
+                              spacing={0}
+                              sx={{
+                                display: "flex",
+                                justifyContent: "center",
+                                padding: "0px",
+                                margin: "0px",
+                              }}
                             >
-                              {recado.status}
-                            </StyledTableCell>
-                            <StyledTableCell
-                              align="center"
-                              className="border-r-2"
-                            >
-                              {recado.assunto}
-                            </StyledTableCell>
-                            <StyledTableCell
-                              sx={{ padding: "10px" }}
-                              align="center"
-                              className="border-r-2"
-                            >
-                              <SmartText
-                                text={recado.descricao}
-                                length={
-                                  windowWidth != 0 ? windowWidth / 12 : 130
-                                }
-                              />
-                            </StyledTableCell>
-                            <StyledTableCell>
-                              <Stack
-                                direction="row"
-                                spacing={0}
-                                sx={{
-                                  display: "flex",
-                                  justifyContent: "center",
-                                  padding: "0px",
-                                  margin: "0px",
-                                }}
+                              <IconButton
+                                sx={{ padding: "0px", marginRight: "5px" }}
+                                onClick={() => deletarRecado(recado)}
                               >
-                                <IconButton
-                                  sx={{ padding: "0px", marginRight: "5px" }}
-                                  onClick={() => deletarRecado(recado)}
-                                >
-                                  <DeleteForeverIcon sx={{ fontSize: 30 }} />
-                                </IconButton>
-                                <IconButton
-                                  sx={{ padding: "0px", marginRight: "5px" }}
-                                  onClick={() => editarRecado(recado.id)}
-                                >
-                                  <EditIcon sx={{ fontSize: 30 }} />
-                                </IconButton>
-                                <IconButton
-                                  sx={{ padding: "0px", margin: "0px" }}
-                                  onClick={() =>
-                                    arquivar
-                                      ? desarquivarRecado(recado)
-                                      : arquivarRecado(recado)
-                                  }
-                                >
-                                  {arquivar ? (
-                                    <UnarchiveIcon sx={{ fontSize: 30 }} />
-                                  ) : (
-                                    <ArchiveIcon sx={{ fontSize: 30 }} />
-                                  )}
-                                </IconButton>
-                              </Stack>
-                            </StyledTableCell>
-                          </>
-                        </StyledTableRow>
-                      ))}
+                                <DeleteForeverIcon sx={{ fontSize: 30 }} />
+                              </IconButton>
+                              <IconButton
+                                sx={{ padding: "0px", marginRight: "5px" }}
+                                onClick={() => editarRecado(recado.id)}
+                              >
+                                <EditIcon sx={{ fontSize: 30 }} />
+                              </IconButton>
+                              <IconButton
+                                sx={{ padding: "0px", margin: "0px" }}
+                                onClick={() =>
+                                  arquivar
+                                    ? desarquivarRecado(recado)
+                                    : arquivarRecado(recado)
+                                }
+                              >
+                                {arquivar ? (
+                                  <UnarchiveIcon sx={{ fontSize: 30 }} />
+                                ) : (
+                                  <ArchiveIcon sx={{ fontSize: 30 }} />
+                                )}
+                              </IconButton>
+                            </Stack>
+                          </StyledTableCell>
+                        </>
+                      </StyledTableRow>
+                    ))}
                   </TableBody>
                 </Table>
               </TableContainer>
             )}
             {/* eslint-disable react/jsx-props-no-spreading */}
-            <PaginationContainer>
-              <Pagination
-                onChange={handleChangePage}
-                page={currentPage}
-                count={page}
-                size="large"
-                variant="outlined"
-                renderItem={(item) => (
-                  <PaginationItem
-                    component={Link}
-                    to={`/recados/page=${item.page}`}
-                    {...item}
-                  />
-                )}
-              />
-            </PaginationContainer>
+            {!nadaEncontrado && (
+              <PaginationContainer>
+                <Pagination
+                  onChange={handleChangePage}
+                  page={currentPage}
+                  count={page}
+                  size="large"
+                  variant="outlined"
+                  renderItem={(item) => (
+                    <PaginationItem
+                      component={Link}
+                      to={`/recados/page=${item.page}`}
+                      {...item}
+                    />
+                  )}
+                />
+              </PaginationContainer>
+            )}
           </Container>
         </Grid>
       </Grid>
